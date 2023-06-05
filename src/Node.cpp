@@ -16,6 +16,10 @@ vector<DirectedEdge> * Node::GetEdges() {
     return &(this->edges);
 }
 
+void Node::AddEdge(const Node *end, int max_flow) {
+    this->edges.push_back(DirectedEdge(this, end, max_flow));
+}
+
 Node::~Node() {
 }
 

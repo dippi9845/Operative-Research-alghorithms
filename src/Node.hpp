@@ -19,6 +19,8 @@ public:
 
     vector<DirectedEdge> * GetEdges();
 
+    void AddEdge(const Node * end, int max_flow);
+
 };
 
 #endif
