@@ -17,7 +17,7 @@ public:
     ~Graph();
 
     const Node * AddNode();
-    Graph * AddEdge(const Node * start, const Node * end, int max_flow);
+    Graph * AddEdge(Node * start, const Node * end, int max_flow);
     Graph * AddEdgeToLastNode(const Node * end, int max_flow);
     int GetNodesNumber();
     int GetMaxFlow();

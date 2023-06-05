@@ -16,7 +16,7 @@ const Node *Graph::AddNode()
     return node;
 }
 
-Graph * Graph::AddEdge(const Node *start, const Node *end, int max_flow) {
+Graph * Graph::AddEdge(Node *start, const Node *end, int max_flow) {
     if (this->highest_max_flow < max_flow) {
         this->highest_max_flow = max_flow;
     }
