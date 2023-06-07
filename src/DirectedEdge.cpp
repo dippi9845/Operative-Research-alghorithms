@@ -1,6 +1,6 @@
 #include "DirectedEdge.hpp"
 
-DirectedEdge::DirectedEdge(const Node * start, const Node * end, int max_flow) {
+DirectedEdge::DirectedEdge(Node * start, Node * end, int max_flow) {
     this->start = start;
     this->end = end;
     this->max_flow = max_flow;
@@ -19,11 +19,11 @@ int DirectedEdge::GetCurrentFlow() {
     return this->curent_flow;
 }
 
-const Node * DirectedEdge::GetEnd() {
+Node * DirectedEdge::GetEnd() {
     return this->end;
 }
 
-const Node * DirectedEdge::GetStart() {
+Node * DirectedEdge::GetStart() {
     return this->start;
 }
 

@@ -1,6 +1,9 @@
 #include "Graph.hpp"
 
-Graph::Graph() {
+Graph::Graph(Node * source, Node * silk)
+{
+    this->source = source;
+    this->silk = silk;
     this->last_node_number = 0;
     this->highest_max_flow = 0;
 }
@@ -27,6 +30,23 @@ Graph * Graph::AddEdge(Node *start, const Node *end, int max_flow) {
 
 Graph * Graph::AddEdgeToLastNode(const Node *end, int max_flow) {
     return this->AddEdge(&(this->nodes.back()), end, max_flow);
+}
+
+vector<Node> Graph::GetNodes() {
+    // THIS IS TOTALLY UNSAFE, IT DOES NOT FOLLOW ENCASPULATION
+    // BUT FOR THIS LIMITED USECASE CAN BE ACCEPTED
+    // IT SHOULD RETURN A COPY
+    return this->nodes;
+}
+
+Node *Graph::GetSource()
+{
+    return this->source;
+}
+
+Node *Graph::GetSilk()
+{
+    return this->source;
 }
 
 int Graph::GetNodesNumber()

@@ -20,6 +20,11 @@ void Node::AddEdge(const Node *end, int max_flow) {
     this->edges.push_back(DirectedEdge(this, end, max_flow));
 }
 
+bool Node::operator==(Node n)
+{
+    return this->node_num == n.node_num;
+}
+
 Node::~Node() {
 }
 
