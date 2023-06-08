@@ -1,6 +1,8 @@
 #include "Graph.hpp"
+#include "Node.hpp"
+#include "DirectedEdge.hpp"
 
-Graph::Graph(Node * source, Node * silk)
+Graph::Graph(int source, int silk)
 {
     this->source = source;
     this->silk = silk;
@@ -19,17 +21,17 @@ const Node *Graph::AddNode()
     return node;
 }
 
-Graph * Graph::AddEdge(Node *start, const Node *end, int max_flow) {
+Graph * Graph::AddEdge(int start, int end, int max_flow) {
     if (this->highest_max_flow < max_flow) {
         this->highest_max_flow = max_flow;
     }
     this->edge_number++;
-    start->AddEdge(end, max_flow);
+    this->nodes[start].AddEdge(&(this->nodes[end]), max_flow);
     return this;
 }
 
-Graph * Graph::AddEdgeToLastNode(const Node *end, int max_flow) {
-    return this->AddEdge(&(this->nodes.back()), end, max_flow);
+Graph * Graph::AddEdgeToLastNode(int end, int max_flow) {
+    return this->AddEdge( this->nodes.size() - 1, end, max_flow);
 }
 
 vector<Node> Graph::GetNodes() {
@@ -41,12 +43,12 @@ vector<Node> Graph::GetNodes() {
 
 Node *Graph::GetSource()
 {
-    return this->source;
+    return &(this->nodes[this->source]);
 }
 
 Node *Graph::GetSilk()
 {
-    return this->source;
+    return &(this->nodes[this->silk]);
 }
 
 int Graph::GetNodesNumber()
