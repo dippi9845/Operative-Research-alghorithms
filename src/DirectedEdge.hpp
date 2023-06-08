@@ -1,24 +1,22 @@
-#include "Node.hpp"
+#ifndef DIRECTED_EDGE_H
+#define DIRECTED_EDGE_H
 
-#ifndef EDGE_H
-#define EDGE_H
-
-class DirectedEdge {
+template <class T> class DirectedEdge {
 private:
-    Node * start;
-    Node * end;
+    T * start;
+    T * end;
     int max_flow;
     int curent_flow;
 
 public:
-    DirectedEdge(Node * start, Node * end, int max_flow);
-    ~DirectedEdge();
+    DirectedEdge<T>(T * start, T * end, int max_flow);
+    ~DirectedEdge<T>();
 
     int IncreaseCurrentFlow(int flow);
     int GetCurrentFlow();
     int GetMaxFlow();
-    Node * GetStart();
-    Node * GetEnd();
+    T * GetStart();
+    T * GetEnd();
     bool HasResidue();
     int GetResidueFlow();
 

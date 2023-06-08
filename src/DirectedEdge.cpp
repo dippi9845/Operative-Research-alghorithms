@@ -1,13 +1,15 @@
 #include "DirectedEdge.hpp"
 
-DirectedEdge::DirectedEdge(Node * start, Node * end, int max_flow) {
+template <class T>
+DirectedEdge<T>::DirectedEdge(T * start, T * end, int max_flow) {
     this->start = start;
     this->end = end;
     this->max_flow = max_flow;
     this->curent_flow = 0;
 }
 
-int DirectedEdge::IncreaseCurrentFlow(int flow) {
+template <class T>
+int DirectedEdge<T>::IncreaseCurrentFlow(int flow) {
     if (this->curent_flow + flow <= this->max_flow){
         this->curent_flow += flow;
     }
@@ -15,29 +17,37 @@ int DirectedEdge::IncreaseCurrentFlow(int flow) {
     return this->curent_flow;
 }
 
-int DirectedEdge::GetCurrentFlow() {
+template <class T>
+int DirectedEdge<T>::GetCurrentFlow() {
     return this->curent_flow;
 }
 
-Node * DirectedEdge::GetEnd() {
+template <class T>
+T * DirectedEdge<T>::GetEnd() {
     return this->end;
 }
 
-Node * DirectedEdge::GetStart() {
+template <class T>
+T * DirectedEdge<T>::GetStart() {
     return this->start;
 }
 
-int DirectedEdge::GetMaxFlow() {
+template <class T>
+int DirectedEdge<T>::GetMaxFlow() {
     return this->max_flow;
 }
 
-bool DirectedEdge::HasResidue() {
+template <class T>
+bool DirectedEdge<T>::HasResidue() {
     return this->curent_flow < this->max_flow;
 }
 
-int DirectedEdge::GetResidueFlow() {
+template <class T>
+int DirectedEdge<T>::GetResidueFlow() {
     return this->max_flow - this->curent_flow;
 }
 
-DirectedEdge::~DirectedEdge() {
+template <class T>
+DirectedEdge<T>::~DirectedEdge()
+{
 }
