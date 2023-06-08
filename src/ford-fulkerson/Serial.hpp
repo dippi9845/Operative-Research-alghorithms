@@ -1,17 +1,16 @@
 #ifndef FORD_FULKERSON_SERIAL
 #define FORD_FULKERSON_SERIAL
-#include "Graph.hpp"
-#include "Label.hpp"
+#include "../Graph.hpp"
 
 class Path
 {
 private:
-    vector<DirectedEdge *> edges;
+    vector<DirectedEdge<Node> *> edges;
     int min_flow;
 public:
     Path();
     bool IsEmpty();
-    void AddEdge(DirectedEdge * edge);
+    void AddEdge(DirectedEdge<Node> * edge);
     int IncreaseFlow();
 
     ~Path();
