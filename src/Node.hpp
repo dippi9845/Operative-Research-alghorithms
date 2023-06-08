@@ -9,7 +9,7 @@ class Node {
 
 private:
     int node_num;
-    vector<DirectedEdge> edges;
+    vector<DirectedEdge<Node>> edges;
 
 public:
     Node(int nodeNum);
@@ -17,9 +17,9 @@ public:
     
     int GetNodeNum();
 
-    vector<DirectedEdge> * GetEdges();
+    vector<DirectedEdge<Node>> * GetEdges();
 
-    void AddEdge(const Node * end, int max_flow);
+    void AddEdge(Node * end, int max_flow);
     bool operator==(Node n);
 
 };
