@@ -1,9 +1,10 @@
-#ifndef GRAPH_H
-#define GRAPH_H
-
 #include "Node.hpp"
 #include <vector>
 using std::vector;
+
+#ifndef GRAPH_H
+#define GRAPH_H
+
 
 class Graph {
 private:

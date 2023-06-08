@@ -1,6 +1,6 @@
+#include "../Graph.hpp"
 #ifndef FORD_FULKERSON_SERIAL
 #define FORD_FULKERSON_SERIAL
-#include "../Graph.hpp"
 
 class Path
 {

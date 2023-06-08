@@ -1,9 +1,10 @@
-#ifndef NODE_H
-#define NODE_H
-
 #include "DirectedEdge.hpp"
 #include <vector>
 using std::vector;
+
+#ifndef NODE_H
+#define NODE_H
+
 
 class Node {
 

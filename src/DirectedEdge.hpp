@@ -22,4 +22,7 @@ public:
 
 };
 
+#include "Node.hpp"
+
+template class DirectedEdge<Node>;
 #endif
