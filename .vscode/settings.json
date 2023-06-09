@@ -6,6 +6,10 @@
         "string": "cpp",
         "unordered_map": "cpp",
         "string_view": "cpp",
-        "initializer_list": "cpp"
+        "initializer_list": "cpp",
+        "cstddef": "cpp",
+        "memory": "cpp",
+        "type_traits": "cpp",
+        "ostream": "cpp"
     }
 }
