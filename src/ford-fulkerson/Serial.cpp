@@ -3,6 +3,7 @@
 #include "../Node.hpp"
 #include "../DirectedEdge.hpp"
 #include <queue>
+#include <cstdlib>
 using std::queue;
 
 void FordFulkersonSerial::InitCopyGraph() {
@@ -10,10 +11,14 @@ void FordFulkersonSerial::InitCopyGraph() {
 
     for (Node i : nodes) {
         this->copy->AddNode();
+    }
+
+    for (Node i : nodes) {
         vector<DirectedEdge<Node>> * edges = i.GetEdges();
 
         for (DirectedEdge<Node> e : *edges) {
-            this->copy->AddEdgeToLastNode(e.GetEnd()->GetNodeNum(), e.GetMaxFlow());
+            //this->copy->AddEdgeToLastNode(e.GetEnd()->GetNodeNum(), e.GetMaxFlow());
+            this->copy->AddEdge(i.GetNodeNum(), e.GetEnd()->GetNodeNum(), e.GetMaxFlow());
         }
     }
 }
@@ -21,7 +26,7 @@ void FordFulkersonSerial::InitCopyGraph() {
 Path FordFulkersonSerial::BFS(Node * start, Node * end) {
     queue<Node *> qu;
     Path rtr = Path();
-    vector<DirectedEdge<Node> *> parent_edge = vector<DirectedEdge<Node> *>(this->original->GetNodesNumber(), nullptr);
+    vector<DirectedEdge<Node> *> parent_edge = vector<DirectedEdge<Node> *>(this->original->GetNodesNumber(), NULL);
     vector<bool> visited = vector<bool>(this->original->GetNodesNumber(), false);
 
     qu.push(start);
@@ -30,22 +35,23 @@ Path FordFulkersonSerial::BFS(Node * start, Node * end) {
         qu.pop();
 
         if (*current == *end) {
-            while (current != nullptr) {
+            while (current != NULL) {
                 DirectedEdge<Node> * pe = parent_edge[current->GetNodeNum()];
                 rtr.AddEdge(pe);
-                current = pe->GetStart();
+                current = pe->GetStart(); // tira fuori un indirizzaccio
             }
             
         }
 
         vector<DirectedEdge<Node>> edges = *current->GetEdges();
 
-        for (DirectedEdge<Node> edge : edges) {
-            const int node_num = edge.GetEnd()->GetNodeNum();
-            if (!visited[node_num] && edge.HasResidue()) {
+        for (long unsigned int edge_idx = 0; edge_idx < edges.size(); edge_idx++) {
+
+            const int node_num = edges[edge_idx].GetEnd()->GetNodeNum();
+            if (!visited[node_num] && edges[edge_idx].HasResidue()) {
                 visited[node_num] = true;
-                parent_edge[node_num] = &edge;
-                qu.push(edge.GetEnd());
+                parent_edge[node_num] = &(edges[edge_idx]);
+                qu.push((edges[edge_idx]).GetEnd());
             }
         }
     }
@@ -55,8 +61,9 @@ Path FordFulkersonSerial::BFS(Node * start, Node * end) {
 
 FordFulkersonSerial::FordFulkersonSerial(Graph *max_flow_graph) {
     this->original = max_flow_graph;
-    this->copy = new Graph(this->original->GetSource()->GetNodeNum(), this->original->GetSilk()->GetNodeNum());
-    this->InitCopyGraph();
+    this->copy = max_flow_graph;
+    //this->copy = new Graph(this->original->GetSource()->GetNodeNum(), this->original->GetSilk()->GetNodeNum());
+    //this->InitCopyGraph();
     
 }
 
