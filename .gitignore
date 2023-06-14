@@ -3,3 +3,5 @@ object/*
 *.o
 
 exe/*
+
+googletest/
