@@ -29,20 +29,12 @@ Path FordFulkersonSerial::BFS(Node * start, Node * end) {
     vector<DirectedEdge<Node> *> parent_edge = vector<DirectedEdge<Node> *>(this->original->GetNodesNumber(), NULL);
     vector<bool> visited = vector<bool>(this->original->GetNodesNumber(), false);
     vector<DirectedEdge<Node>> edges;
-
+    Node * current;
+    
     qu.push(start);
     while (!qu.empty()) {
-        Node * current = qu.front();
+        current = qu.front();
         qu.pop();
-
-        if (*current == *end) {
-            while (current != NULL) {
-                DirectedEdge<Node> * pe = parent_edge[current->GetNodeNum()];
-                rtr.AddEdge(pe);
-                current = pe->GetStart(); // tira fuori un indirizzaccio
-            }
-            
-        }
 
         edges = *current->GetEdges();
 
@@ -56,6 +48,15 @@ Path FordFulkersonSerial::BFS(Node * start, Node * end) {
             }
         }
     }
+
+    if (*current == *end) {
+            while (current != NULL) {
+                DirectedEdge<Node> * pe = parent_edge[current->GetNodeNum()];
+                rtr.AddEdge(pe);
+                current = pe->GetStart(); // tira fuori un indirizzaccio
+            }
+            
+        }
 
     return rtr;
 }
