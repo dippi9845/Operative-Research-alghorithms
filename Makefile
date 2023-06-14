@@ -26,7 +26,10 @@ test-ford-serial: ${OBJECT_DIR}/FordSerial.o ${SRC}/test/test-Ford-Fulkerson-Ser
 	${C_FLAGS} -g ${SRC}/test/test-Ford-Fulkerson-Serial.cpp ${OBJECT_DIR}/DirectedEdge.o ${OBJECT_DIR}/Node.o ${OBJECT_DIR}/Graph.o ${OBJECT_DIR}/FordSerial.o -o ${EXE_DIR}/test-for-serial
 
 
-.PHONY : all test-ford-serial clean
+test-graph: ${OBJECT_DIR}/Graph.o ${SRC}/test/test-graph.cpp
+	${C_FLAGS} -g ${SRC}/test/test-graph.cpp ${OBJECT_DIR}/DirectedEdge.o ${OBJECT_DIR}/Node.o ${OBJECT_DIR}/Graph.o -o ${EXE_DIR}/test-graph
+
+.PHONY : all test-ford-serial test-graph clean
 
 
 clean :
