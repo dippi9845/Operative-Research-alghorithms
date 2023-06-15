@@ -26,6 +26,11 @@ bool Node::operator==(Node n)
     return this->node_num == n.node_num;
 }
 
+bool Node::operator!=(Node n)
+{
+    return this->node_num != n.node_num;
+}
+
 Node::~Node() {
 }
 

@@ -22,6 +22,7 @@ public:
 
     void AddEdge(Node * end, int max_flow);
     bool operator==(Node n);
+    bool operator!=(Node n);
 
 };
 
