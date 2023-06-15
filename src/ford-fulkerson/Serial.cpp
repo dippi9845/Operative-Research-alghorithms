@@ -2,6 +2,7 @@
 #include "../Graph.hpp"
 #include "../Node.hpp"
 #include "../DirectedEdge.hpp"
+#include <cstdio>
 #include <queue>
 #include <cstdlib>
 using std::queue;
@@ -29,10 +30,10 @@ Path FordFulkersonSerial::BFS(Node * start, Node * end) {
     vector<DirectedEdge<Node> *> parent_edge = vector<DirectedEdge<Node> *>(this->original->GetNodesNumber(), NULL);
     vector<bool> visited = vector<bool>(this->original->GetNodesNumber(), false);
     vector<DirectedEdge<Node>> * edges;
-    Node * current;
+    Node * current = NULL;
     
     qu.push(start);
-    while (!qu.empty()) {
+    while (!qu.empty() && current != end) {
         current = qu.front();
         qu.pop();
 
@@ -42,16 +43,18 @@ Path FordFulkersonSerial::BFS(Node * start, Node * end) {
 
             DirectedEdge<Node> * edge = &edges->at(edge_idx);
 
-            const int node_num = edge->GetEnd()->GetNodeNum();
-            if (!visited[node_num] && edge->HasResidue()) {
-                visited[node_num] = true;
-                parent_edge[node_num] = edge; // copia sempre lo stesso indirizzo
+            const int adj_num = edge->GetEnd()->GetNodeNum();
+
+            if (!visited[adj_num] && edge->HasResidue()) {
+                visited[adj_num] = true;
+                parent_edge[adj_num] = edge; // copia sempre lo stesso indirizzo
                 qu.push(edge->GetEnd());
             }
         }
     }
 
-    if (*current == *end) {
+    if (parent_edge[end->GetNodeNum()] != NULL) {
+        current = end;
         while (current != start) {
             DirectedEdge<Node> * pe = parent_edge[current->GetNodeNum()];
             rtr.AddEdge(pe);
@@ -102,8 +105,8 @@ bool Path::IsEmpty() {
 }
 
 void Path::AddEdge(DirectedEdge<Node> *edge) {
-    if (edge->GetMaxFlow() < this->min_flow) {
-        this->min_flow = edge->GetMaxFlow();
+    if (edge->GetResidueFlow() < this->min_flow) {
+        this->min_flow = edge->GetResidueFlow();
     }
     this->edges.push_back(edge);
 }
