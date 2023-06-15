@@ -28,7 +28,7 @@ Path FordFulkersonSerial::BFS(Node * start, Node * end) {
     Path rtr = Path();
     vector<DirectedEdge<Node> *> parent_edge = vector<DirectedEdge<Node> *>(this->original->GetNodesNumber(), NULL);
     vector<bool> visited = vector<bool>(this->original->GetNodesNumber(), false);
-    vector<DirectedEdge<Node>> edges;
+    vector<DirectedEdge<Node>> * edges;
     Node * current;
     
     qu.push(start);
@@ -36,27 +36,29 @@ Path FordFulkersonSerial::BFS(Node * start, Node * end) {
         current = qu.front();
         qu.pop();
 
-        edges = *current->GetEdges();
+        edges = current->GetEdges();
 
-        for (long unsigned int edge_idx = 0; edge_idx < edges.size(); edge_idx++) {
+        for (long unsigned int edge_idx = 0; edge_idx < edges->size(); edge_idx++) {
 
-            const int node_num = edges[edge_idx].GetEnd()->GetNodeNum();
-            if (!visited[node_num] && edges[edge_idx].HasResidue()) {
+            DirectedEdge<Node> * edge = &edges->at(edge_idx);
+
+            const int node_num = edge->GetEnd()->GetNodeNum();
+            if (!visited[node_num] && edge->HasResidue()) {
                 visited[node_num] = true;
-                parent_edge[node_num] = &(edges[edge_idx]);
-                qu.push((edges[edge_idx]).GetEnd());
+                parent_edge[node_num] = edge; // copia sempre lo stesso indirizzo
+                qu.push(edge->GetEnd());
             }
         }
     }
 
     if (*current == *end) {
-            while (current != NULL) {
-                DirectedEdge<Node> * pe = parent_edge[current->GetNodeNum()];
-                rtr.AddEdge(pe);
-                current = pe->GetStart(); // tira fuori un indirizzaccio
-            }
-            
+        while (current != start) {
+            DirectedEdge<Node> * pe = parent_edge[current->GetNodeNum()];
+            rtr.AddEdge(pe);
+            current = pe->GetStart();
         }
+        
+    }
 
     return rtr;
 }
