@@ -1,6 +1,6 @@
 #include "../Graph.hpp"
 #include "../ford-fulkerson/Serial.hpp"
-#include <stdio.h>
+#include <cstdio>
 
 int main() {
     Graph a = Graph(1, 4);
