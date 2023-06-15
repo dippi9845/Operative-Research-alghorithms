@@ -1,5 +1,5 @@
 #include "../Graph.hpp"
-#include "../ford-fulkerson/Serial.hpp"
+#include "../ford-fulkerson/Omp.hpp"
 #include <cstdio>
 
 int main() {
@@ -18,7 +18,7 @@ int main() {
     a.AddEdge(2, 3, 3); // 2 ---(3)---> 3
     a.AddEdge(3, 4, 5); // 3 ---(5)---> 4
     
-    FordFulkersonSerial solver = FordFulkersonSerial(&a);
+    FordFulkersonOmp solver = FordFulkersonOmp(&a);
     printf("Max flow: %d\n", solver.Solve());
 
     Graph b = Graph(1, 9);
@@ -48,7 +48,7 @@ int main() {
     b.AddEdge(8, 9, 20);
 
 
-    solver = FordFulkersonSerial(&b);
+    solver = FordFulkersonOmp(&b);
     printf("Max flow: %d\n", solver.Solve());
 
 
@@ -93,7 +93,6 @@ int main() {
     c.AddEdge(10, 11, 4);
 
 
-    solver = FordFulkersonSerial(&c);
+    solver = FordFulkersonOmp(&c);
     printf("Max flow: %d\n", solver.Solve());
-
 }
