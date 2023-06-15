@@ -2,7 +2,7 @@
     "version": "0.2.0",
     "configurations": [
       {
-        "name": "Debug  Serial Ford",
+        "name": "Debug Serial Ford",
         "type": "cppdbg",
         "request": "launch",
         "program": "${workspaceFolder}/exe/test-for-serial",
@@ -15,10 +15,23 @@
         "miDebuggerPath": "/usr/bin/gdb"
       },
       {
-        "name": "Debug  graph test",
+        "name": "Debug graph test",
         "type": "cppdbg",
         "request": "launch",
         "program": "${workspaceFolder}/exe/test-graph",
+        "args": [],
+        "stopAtEntry": false,
+        "cwd": "${workspaceFolder}",
+        "environment": [],
+        "externalConsole": false,
+        "MIMode": "gdb",
+        "miDebuggerPath": "/usr/bin/gdb"
+      },
+      {
+        "name": "Debug Omp Ford",
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "${workspaceFolder}/exe/test-for-omp",
         "args": [],
         "stopAtEntry": false,
         "cwd": "${workspaceFolder}",
