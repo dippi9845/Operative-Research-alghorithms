@@ -21,12 +21,12 @@ class FordFulkersonSerial {
 
 private:
     Graph * original;
-    Graph * copy;
 
     Path BFS(Node * start, Node * end);
 
 protected:
-
+    Graph * copy;
+    
     void InitCopyGraph();
 
 public:

@@ -47,7 +47,7 @@ Path FordFulkersonSerial::BFS(Node * start, Node * end) {
 
             if (!visited[adj_num] && edge->HasResidue()) {
                 visited[adj_num] = true;
-                parent_edge[adj_num] = edge; // copia sempre lo stesso indirizzo
+                parent_edge[adj_num] = edge;
                 qu.push(edge->GetEnd());
             }
         }
