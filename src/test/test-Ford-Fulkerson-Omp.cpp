@@ -95,4 +95,95 @@ int main() {
 
     solver = FordFulkersonOmp(&c);
     printf("Max flow: %d\n", solver.Solve());
+
+    Graph d = Graph(1,6);
+    d.AddNode();
+
+    d.AddNode();
+    d.AddNode();
+    d.AddNode();
+    d.AddNode();
+    d.AddNode();
+    d.AddNode();
+
+    d.AddEdge(1, 2, 3);
+    d.AddEdge(1, 3, 3);
+    d.AddEdge(2, 3, 1);
+    d.AddEdge(2, 5, 4);
+    d.AddEdge(2, 4, 1);
+    d.AddEdge(3, 5, 2);
+    d.AddEdge(4, 6, 3);
+    d.AddEdge(5, 4, 2);
+    d.AddEdge(5, 6, 3);
+
+    solver = FordFulkersonOmp(&d);
+    printf("Max flow: %d\n", solver.Solve());
+
+    Graph e = Graph(1, 5);
+    e.AddNode();
+
+    e.AddNode();
+    e.AddNode();
+    e.AddNode();
+    e.AddNode();
+    e.AddNode();
+
+    e.AddEdge(1, 3, 4);
+    e.AddEdge(1, 4, 4);
+    e.AddEdge(2, 1, 2);
+    e.AddEdge(2, 3, 1);
+    e.AddEdge(2, 4, 3);
+    e.AddEdge(3, 5, 3);
+    e.AddEdge(3, 4, 2);
+    e.AddEdge(4, 5, 5);
+
+    solver = FordFulkersonOmp(&e);
+    printf("Max flow: %d\n", solver.Solve());
+
+    Graph f = Graph(1, 6);
+    f.AddNode();
+
+    f.AddNode();
+    f.AddNode();
+    f.AddNode();
+    f.AddNode();
+    f.AddNode();
+    f.AddNode();
+
+    f.AddEdge(1, 2, 5);
+    f.AddEdge(1, 3, 5);
+    f.AddEdge(2, 3, 5);
+    f.AddEdge(2, 4, 5);
+    f.AddEdge(2, 5, 5);
+    f.AddEdge(3, 5, 5);
+    f.AddEdge(5, 4, 5);
+    f.AddEdge(5, 6, 5);
+    f.AddEdge(4, 6, 5);
+
+    solver = FordFulkersonOmp(&f);
+    printf("Max flow: %d\n", solver.Solve());
+
+    Graph g = Graph(1, 6);
+    g.AddNode();
+
+    g.AddNode();
+    g.AddNode();
+    g.AddNode();
+    g.AddNode();
+    g.AddNode();
+    g.AddNode();
+
+    g.AddEdge(1, 3, 2);
+    g.AddEdge(1, 5, 4);
+    g.AddEdge(2, 1, 2);
+    g.AddEdge(2, 3, 2);
+    g.AddEdge(2, 4, 3);
+    g.AddEdge(3, 5, 4);
+    g.AddEdge(3, 4, 1);
+    g.AddEdge(4, 6, 5);
+    g.AddEdge(5, 4, 2);
+    g.AddEdge(5, 6, 2);
+
+    solver = FordFulkersonOmp(&g);
+    printf("Max flow: %d\n", solver.Solve());
 }
