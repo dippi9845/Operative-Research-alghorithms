@@ -78,7 +78,7 @@ GraphGenerator::~GraphGenerator(){
 }
 
 GraphGenerator * GraphGenerator::NodeNumber(int node_number) {
-    this->node_num = node_num;
+    this->node_num = node_number;
     return this;
 }
 
@@ -146,9 +146,9 @@ Graph GraphGenerator::Generate() {
     int current_node = 0;
 
     while (remaining_edges > 0) {
-        int edges_to_add = rand() % (remaining_edges / 4) + 1; // avoid zero
+        int edges_to_add = rand() % 4 + 1; // avoid zero
         
-        for (int i = 0; i < edges_to_add; i++) {
+        for (int i = 0; i < edges_to_add && remaining_edges > 0; i++) {
             const int random_node = rand() % this->node_num;
 
             this->AddEdgeWithRandomMaxFlow(current_node, random_node);
@@ -160,5 +160,6 @@ Graph GraphGenerator::Generate() {
         current_node %= this->node_num;
 
     }
-    
+
+    return this->generated;
 }
