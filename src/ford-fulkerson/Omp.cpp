@@ -33,7 +33,6 @@ Path FordFulkersonOmp::BFS(Node *start, Node *end) {
 
     #pragma omp parallel default(none) shared(start)
     {
-        #pragma omp single
         this->Explore(start);
 
     }
