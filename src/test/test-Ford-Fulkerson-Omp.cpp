@@ -186,4 +186,14 @@ int main() {
 
     solver = FordFulkersonOmp(&g);
     printf("Max flow: %d\n", solver.Solve());
+
+    printf("Generating...\n");
+    GraphGenerator gf = GraphGenerator();
+    Graph h = gf.NodeNumber(120)
+                ->EdgeNumber(100000)
+                ->Generate();
+    printf("Generated OK\n");
+    
+    solver = FordFulkersonOmp(&h);
+    printf("Max flow (generated): %d\n", solver.Solve());
 }
