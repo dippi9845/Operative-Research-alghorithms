@@ -1,6 +1,8 @@
 #include "Graph.hpp"
 #include "Node.hpp"
 #include "DirectedEdge.hpp"
+#include <cstdlib>
+#include <ctime>
 
 Graph::Graph(int source, int silk)
 {
@@ -59,4 +61,104 @@ int Graph::GetNodesNumber()
 int Graph::GetMaxFlow()
 {
     return this->highest_max_flow;
+}
+
+Graph * GraphGenerator::AddEdgeWithRandomMaxFlow(int start, int end) {
+    return this->generated.AddEdge(start, end, rand() % 50 + 1);
+}
+
+GraphGenerator::GraphGenerator() {
+    this->edge_num = 0;
+    this->node_num = 0;
+    this->min_one_path = true;
+    this->seed = 42;
+}
+
+GraphGenerator::~GraphGenerator(){
+}
+
+GraphGenerator * GraphGenerator::NodeNumber(int node_number) {
+    this->node_num = node_num;
+    return this;
+}
+
+GraphGenerator * GraphGenerator::EdgeNumber(int edge_number){
+    this->edge_num = edge_number;
+    return this;
+}
+
+GraphGenerator *GraphGenerator::MinOnePath(bool condition)
+{
+    this->min_one_path = condition;
+    return this;
+}
+
+GraphGenerator * GraphGenerator::Seed(unsigned int seed) {
+    this->seed = seed;
+    return this;
+}
+
+GraphGenerator * GraphGenerator::SeedByTime() {
+    return this->Seed(time(NULL));
+}
+
+Graph GraphGenerator::Generate() {
+    srand(this->seed);
+
+    int source = rand() % this->node_num;
+    int silk = rand() % this->node_num;
+    int remaining_edges = this->edge_num;
+
+
+    this->generated = Graph(source, silk);
+
+    /* add all nodes */
+    for (int i = 0; i < this->node_num; i++) {
+        this->generated.AddNode();
+    }    
+    
+    /* if u want to ensure a path from source amd silk */
+    if (this->min_one_path) {
+        int intermediate_nodes = rand() % this->node_num;
+
+        if (intermediate_nodes == 0) {
+            this->AddEdgeWithRandomMaxFlow(source, silk);
+        }
+
+        else {
+            intermediate_nodes--;
+            int first_node = rand() % this->node_num;
+            int last_node = first_node;
+            this->AddEdgeWithRandomMaxFlow(source, first_node);
+
+            for (int i = 0; i < intermediate_nodes && remaining_edges > 0; i++) {
+                last_node = rand() % this->node_num;
+                this->AddEdgeWithRandomMaxFlow(first_node, last_node);
+                remaining_edges--;
+                first_node = last_node;
+            }
+
+            this->AddEdgeWithRandomMaxFlow(last_node, silk);
+        }
+
+    }
+
+    int current_node = 0;
+
+    while (remaining_edges > 0) {
+        int edges_to_add = rand() % (remaining_edges / 4) + 1; // avoid zero
+        
+        for (int i = 0; i < edges_to_add; i++) {
+            const int random_node = rand() % this->node_num;
+
+            this->AddEdgeWithRandomMaxFlow(current_node, random_node);
+            
+            remaining_edges--;
+        }
+
+        current_node++;
+        current_node %= this->node_num;
+
+    }
+    
 }

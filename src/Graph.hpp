@@ -33,5 +33,26 @@ public:
     int GetMaxFlow();
 };
 
+class GraphGenerator {
+private:
+    int node_num;
+    int edge_num;
+    bool min_one_path;
+    unsigned int seed;
+    Graph generated = Graph(0, 0);
+
+    Graph * AddEdgeWithRandomMaxFlow(int start, int end);
+
+public:
+    GraphGenerator();
+    GraphGenerator * NodeNumber(int node_number);
+    GraphGenerator * EdgeNumber(int edge_number);
+    GraphGenerator * MinOnePath(bool condition);
+    GraphGenerator * Seed(unsigned int seed);
+    GraphGenerator * SeedByTime();
+    Graph Generate();
+    ~GraphGenerator();
+};
+
 
 #endif
