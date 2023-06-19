@@ -55,7 +55,7 @@ Path FordFulkersonSerial::BFS(Node * start, Node * end) {
 
     if (parent_edge[end->GetNodeNum()] != NULL) {
         current = end;
-        while (current != start) {
+        while (*current != *start) {
             DirectedEdge<Node> * pe = parent_edge[current->GetNodeNum()];
             rtr.AddEdge(pe);
             current = pe->GetStart();
