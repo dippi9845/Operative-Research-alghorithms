@@ -83,7 +83,7 @@ void FordFulkersonCuda::InitializeGraphOnDevice(Graph *g)
     vector<Node> nodes = g->GetNodes();
 
     CUDA_SAFE_CALL(cudaMalloc((void **)&d_flow_matrix, bytes_matrix));
-    CUDA_SAFE_CALL(cudaMemset((void **)&d_flow_matrix, 0, bytes_matrix));
+    CUDA_SAFE_CALL(cudaMemset(d_flow_matrix, 0, bytes_matrix));
     cudaDeviceSynchronize();
 
     for (int start = 0; start < nodes_num; start++) {
@@ -94,25 +94,25 @@ void FordFulkersonCuda::InitializeGraphOnDevice(Graph *g)
             const int edge_index = start * nodes_num + end;
             int *d_edge_index = this->d_flow_matrix + edge_index;
 
-            cudaMemset((void **)&d_edge_index, max_flow, sizeof(max_flow));
+            cudaMemset(d_edge_index, max_flow, sizeof(max_flow));
         }
     }
 }
 
 void FordFulkersonCuda::InitializeStartDestination() {
-    CUDA_SAFE_CALL(cudaMalloc((void **)this->d_start_node, this->nodes_num * sizeof(int)));
-    CUDA_SAFE_CALL(cudaMalloc((void **)this->d_destination_node, this->nodes_num * sizeof(int)));
+    CUDA_SAFE_CALL(cudaMalloc((void **)&this->d_start_node, this->nodes_num * sizeof(int)));
+    CUDA_SAFE_CALL(cudaMalloc((void **)&this->d_destination_node, this->nodes_num * sizeof(int)));
 }
 
 void FordFulkersonCuda::InitializeParentNode() {
-    CUDA_SAFE_CALL(cudaMalloc((void **)this->d_parent_node, this->nodes_num * sizeof(int)));
-    CUDA_SAFE_CALL(cudaMemset((void **)this->d_parent_node, UNREACHED, this->nodes_num * sizeof(int)));
+    CUDA_SAFE_CALL(cudaMalloc((void **)&this->d_parent_node, this->nodes_num * sizeof(int)));
+    CUDA_SAFE_CALL(cudaMemset(this->d_parent_node, UNREACHED, this->nodes_num * sizeof(int)));
 }
 
 
 void FordFulkersonCuda::InitializeVisited() {
-    CUDA_SAFE_CALL(cudaMalloc((void **)this->d_visited, this->nodes_num * sizeof(bool)));
-    CUDA_SAFE_CALL(cudaMemset((void **)this->d_visited, false, this->nodes_num * sizeof(bool)));
+    CUDA_SAFE_CALL(cudaMalloc((void **)&this->d_visited, this->nodes_num * sizeof(bool)));
+    CUDA_SAFE_CALL(cudaMemset(this->d_visited, false, this->nodes_num * sizeof(bool)));
 }
 
 
@@ -121,10 +121,10 @@ bool FordFulkersonCuda::BFS(Node *start, Node *end) {
     int *d_push_queue = this->d_second_queue;
     const int end_num = end->GetNodeNum();
 
-    CUDA_SAFE_CALL(cudaMemset((void **)this->d_parent_node + end_num, UNREACHED, sizeof(int)));
+    CUDA_SAFE_CALL(cudaMemset(this->d_parent_node + end_num, UNREACHED, sizeof(int)));
     
     const int start_num = start->GetNodeNum();
-    CUDA_SAFE_CALL(cudaMemset((void **)d_pop_queue, start_num, sizeof(start_num)));
+    CUDA_SAFE_CALL(cudaMemset(d_pop_queue, start_num, sizeof(start_num)));
 
     // settare lo start come visited
     // azzerare visited
