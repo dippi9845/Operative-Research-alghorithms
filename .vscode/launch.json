@@ -39,6 +39,18 @@
         "externalConsole": false,
         "MIMode": "gdb",
         "miDebuggerPath": "/usr/bin/gdb"
+      },
+      {
+        "name": "CUDA Launch",
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "${workspaceFolder}/exe/test-for-cuda",
+        "args": [],
+        "stopAtEntry": false,
+        "cwd": "${workspaceFolder}",
+        "environment": [],
+        "MIMode": "gdb",
+        "miDebuggerPath": "/usr/bin/cuda-gdb"
       }
     ]
   }
