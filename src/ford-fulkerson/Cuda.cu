@@ -1,4 +1,14 @@
 #include "Cuda.cuh"
+#include <cstdio>
+
+#define CUDA_SAFE_CALL(call)                                                                       \
+    do {                                                                                           \
+        cudaError_t cudaStatus = (call);                                                           \
+        if (cudaStatus != cudaSuccess) {                                                            \
+            printf("Errore CUDA in %s:%d -- %s\n", __FILE__, __LINE__, cudaGetErrorString(cudaStatus)); \
+            exit(EXIT_FAILURE);                                                                    \
+        }                                                                                          \
+    } while (0)
 
 #define THREADS 1024
 #define BLOCKS(X) (X + THREADS - 1) / THREADS
@@ -72,8 +82,8 @@ void FordFulkersonCuda::InitializeGraphOnDevice(Graph *g)
     unsigned int bytes_matrix = nodes_num * nodes_num * sizeof(nodes_num);
     vector<Node> nodes = g->GetNodes();
 
-    cudaMalloc((void **)this->d_flow_matrix, bytes_matrix);
-    cudaMemset((void **)this->d_flow_matrix, 0, bytes_matrix);
+    CUDA_SAFE_CALL(cudaMalloc((void **)d_flow_matrix, bytes_matrix));
+    cudaMemset((void **)d_flow_matrix, 0, bytes_matrix);
     cudaDeviceSynchronize();
 
     for (int start = 0; start < nodes_num; start++) {
@@ -142,7 +152,8 @@ bool FordFulkersonCuda::BFS(Node *start, Node *end) {
 }
 
 
-FordFulkersonCuda::FordFulkersonCuda(Graph * g) : FordFulkersonSerial(g) {
+FordFulkersonCuda::FordFulkersonCuda(Graph * g) {
+    this->graph = g;
     this->nodes_num = g->GetNodesNumber();
     this->InitializeGraphOnDevice(g);
     this->InitializeParentNode();
@@ -155,8 +166,8 @@ FordFulkersonCuda::FordFulkersonCuda(Graph * g) : FordFulkersonSerial(g) {
 
 
 int FordFulkersonCuda::Solve() {
-    Node * source = this->copy->GetSource();
-    Node * sink = this->copy->GetSilk();
+    Node * source = this->graph->GetSource();
+    Node * sink = this->graph->GetSilk();
     int max_flow = 0;
 
     while (this->BFS(source, sink)) {
