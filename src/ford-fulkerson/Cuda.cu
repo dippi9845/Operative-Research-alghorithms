@@ -4,8 +4,47 @@
 #define BLOCKS(X) (X + THREADS - 1) / THREADS
 #define UNREACHED -1
 
+__managed__ int d_nodes_num;
+__managed__ int mng_pushed_num;
 
-__global__ int FordFulkersonCuda::ComputeNextQueue(int to_pop_num,  int * pop_queue, int * push_queue, int * flow_matrix, bool * visited, int *parent_node) {
+__managed__ int mng_flow;
+__managed__ int mng_path_len;
+
+__global__ void IncreaseFlowKernel(int * start_node, int * destination_node, int * flow_matrix) {
+    const int tid = blockIdx.x * blockDim.x + threadIdx.x;
+    if ( tid < mng_path_len ) {
+        const int start = start_node[tid];
+        const int dest = destination_node[tid];
+        const int flow_idx = start * d_nodes_num + dest;
+        flow_matrix[flow_idx] -= mng_flow;
+    }
+}
+
+__global__ void FindPath(int end, int * parent_node, int * start_node, int * destination_node, int * flow_matrix) {
+    int current = end;
+    mng_path_len = 0;
+    mng_flow = __INT_MAX__;
+
+    while (parent_node[current] != UNREACHED) {
+        const int start = parent_node[current];
+        const int destination = current;
+
+        start_node[mng_path_len] = start;
+        destination_node[mng_path_len] = destination;
+
+        const int flow_idx = start * d_nodes_num + destination;
+
+        if (mng_flow > flow_matrix[flow_idx]) {
+            mng_flow = flow_matrix[flow_idx];
+        }
+
+        mng_path_len++;
+
+        current = parent_node[current];
+    }
+}
+
+__global__ void ComputeNextQueue(int to_pop_num,  int * pop_queue, int * push_queue, int * flow_matrix, bool * visited, int *parent_node) {
     // push_queue attualmente ci pensa la cpu
     // senò il primo thread che entra
     const int tid = blockIdx.x * blockDim.x + threadIdx.x;
@@ -16,16 +55,15 @@ __global__ int FordFulkersonCuda::ComputeNextQueue(int to_pop_num,  int * pop_qu
             const int adj_matrix_index = current * d_nodes_num + adj;
 
             if (flow_matrix[adj_matrix_index] > 0 && !visited[adj]) {
-                const int push_at = atomicAdd(&pushed_num, 1) - 1;
+                visited[adj] = true;
+                const int push_at = atomicAdd(&mng_pushed_num, 1) - 1;
                 push_queue[push_at] = adj;
                 atomicExch(parent_node + adj, current);
-                visited[adj] = true;
             }
         }
     }
-
-    return pushed_num;
 }
+
 
 
 void FordFulkersonCuda::InitializeGraphOnDevice(Graph *g)
@@ -51,6 +89,11 @@ void FordFulkersonCuda::InitializeGraphOnDevice(Graph *g)
     }
 }
 
+void FordFulkersonCuda::InitializeStartDestination() {
+    cudaMalloc((void **)this->d_start_node, this->nodes_num * sizeof(int));
+    cudaMalloc((void **)this->d_destination_node, this->nodes_num * sizeof(int));
+}
+
 void FordFulkersonCuda::InitializeParentNode() {
     cudaMalloc((void **)this->d_parent_node, this->nodes_num * sizeof(int));
     cudaMemset((void **)this->d_parent_node, UNREACHED, this->nodes_num * sizeof(int));
@@ -63,15 +106,7 @@ void FordFulkersonCuda::InitializeVisited() {
 }
 
 
-int FordFulkersonCuda::FindMinFlow() {
-    /* computes min flow in path found */
-    int min_flow = 0;
-
-    return min_flow;
-}
-
-
-PathCuda FordFulkersonCuda::BFS(Node *start, Node *end) {
+bool FordFulkersonCuda::BFS(Node *start, Node *end) {
     int *d_pop_queue = this->d_first_queue;
     int *d_push_queue = this->d_second_queue;
     const int end_num = end->GetNodeNum();
@@ -81,13 +116,16 @@ PathCuda FordFulkersonCuda::BFS(Node *start, Node *end) {
     const int start_num = start->GetNodeNum();
     cudaMemset((void **)d_pop_queue, start_num, sizeof(start_num));
 
-    this->pushed_num = 1;
+    // settare lo start come visited
+    // azzerare visited
+
+    mng_pushed_num = 1;
 
     cudaDeviceSynchronize();
 
-    while (this->pushed_num > 0) {
-        const int pop_num = this->pushed_num;
-        this->pushed_num = 0;
+    while (mng_pushed_num > 0) {
+        const int pop_num = mng_pushed_num;
+        mng_pushed_num = 0;
 
         ComputeNextQueue<<<BLOCKS(pop_num), THREADS>>>(pop_num, d_pop_queue, d_push_queue, d_flow_matrix, d_visited, d_parent_node);
         
@@ -98,7 +136,9 @@ PathCuda FordFulkersonCuda::BFS(Node *start, Node *end) {
         d_push_queue = tmp;
     }
 
-    return PathCuda(end_num);
+    FindPath<<<1,1>>>(end_num, d_parent_node, d_start_node, d_destination_node, d_flow_matrix);
+
+    return mng_path_len > 0;
 }
 
 
@@ -107,9 +147,10 @@ FordFulkersonCuda::FordFulkersonCuda(Graph * g) : FordFulkersonSerial(g) {
     this->InitializeGraphOnDevice(g);
     this->InitializeParentNode();
     this->InitializeVisited();
+    this->InitializeStartDestination();
     cudaDeviceSynchronize();
 
-    this->d_nodes_num = this->nodes_num;
+    d_nodes_num = this->nodes_num;
 }
 
 
@@ -117,14 +158,10 @@ int FordFulkersonCuda::Solve() {
     Node * source = this->copy->GetSource();
     Node * sink = this->copy->GetSilk();
     int max_flow = 0;
-    
-    PathCuda bfs_path = this->BFS(source, sink);
 
-    while (!bfs_path.IsEmpty()) {
-
-        max_flow += bfs_path.IncreaseFlow();
-        bfs_path = this->BFS(source, sink);
-    
+    while (this->BFS(source, sink)) {
+        IncreaseFlowKernel<<<BLOCKS(mng_path_len), THREADS>>>(d_start_node, d_destination_node, d_flow_matrix);
+        max_flow += mng_flow;
     }
 
     return max_flow;
@@ -132,34 +169,4 @@ int FordFulkersonCuda::Solve() {
 
 
 FordFulkersonCuda::~FordFulkersonCuda() {
-}
-
-__global__ int PathCuda::IncreaseFlowKernel(int path_len) {
-}
-
-__global__ int PathCuda::FindPath(int end) {
-    int len = 0;
-
-}
-
-PathCuda::PathCuda(int end) {
-    this->path_length = 0;
-    int current_node = end;
-    cudaMalloc((void **)this->d_min_flow, sizeof(int));
-    cudaMemset(this->d_min_flow, __INT_MAX__, sizeof(int));
-
-    this->path_length = FindPath<<<1,1>>>(end);
-    
-}
-
-bool PathCuda::IsEmpty() {
-    return this->path_length == 0;
-}
-
-int PathCuda::IncreaseFlow() {
-    return IncreaseFlowKernel<<<BLOCKS(path_length), THREADS>>>(this->path_length);
-}
-
-PathCuda::~PathCuda() {
-    cudaFree(this->d_min_flow);
 }
