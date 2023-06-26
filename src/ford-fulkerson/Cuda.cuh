@@ -3,7 +3,7 @@
 
 #include "Serial.hpp"
 
-class FordFulkersonCuda : FordFulkersonSerial {
+class FordFulkersonCuda {
     private:
         /*
             Matrix, containing all the flows
@@ -37,6 +37,8 @@ class FordFulkersonCuda : FordFulkersonSerial {
         int *d_start_node;
 
         int nodes_num;
+
+        Graph * graph;
 
         void InitializeGraphOnDevice(Graph *g);
         void InitializeParentNode();
