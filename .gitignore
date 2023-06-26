@@ -5,5 +5,3 @@ object/*
 exe/*
 
 googletest/
-
-git_push.sh
