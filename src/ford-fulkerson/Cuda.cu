@@ -82,8 +82,8 @@ void FordFulkersonCuda::InitializeGraphOnDevice(Graph *g)
     unsigned int bytes_matrix = nodes_num * nodes_num * sizeof(nodes_num);
     vector<Node> nodes = g->GetNodes();
 
-    CUDA_SAFE_CALL(cudaMalloc((void **)d_flow_matrix, bytes_matrix));
-    CUDA_SAFE_CALL(cudaMemset((void **)d_flow_matrix, 0, bytes_matrix));
+    CUDA_SAFE_CALL(cudaMalloc((void **)&d_flow_matrix, bytes_matrix));
+    CUDA_SAFE_CALL(cudaMemset((void **)&d_flow_matrix, 0, bytes_matrix));
     cudaDeviceSynchronize();
 
     for (int start = 0; start < nodes_num; start++) {
@@ -94,7 +94,7 @@ void FordFulkersonCuda::InitializeGraphOnDevice(Graph *g)
             const int edge_index = start * nodes_num + end;
             int *d_edge_index = this->d_flow_matrix + edge_index;
 
-            cudaMemset((void **)d_edge_index, max_flow, sizeof(max_flow));
+            cudaMemset((void **)&d_edge_index, max_flow, sizeof(max_flow));
         }
     }
 }
