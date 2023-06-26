@@ -60,10 +60,13 @@ __global__ void ComputeNextQueue(int to_pop_num,  int * pop_queue, int * push_qu
     const int tid = blockIdx.x * blockDim.x + threadIdx.x;
 
     if (tid < to_pop_num) {
+        printf("[gpu] tid %d pop_num %d ", tid, to_pop_num);
         const int current = pop_queue[tid];
+        printf("current %d\n", current);
+
         for (int adj = 0;  adj < d_nodes_num; adj++) {
             const int adj_matrix_index = current * d_nodes_num + adj;
-
+            printf("[gpu] adiacente %d flusso %d visitato %d\n", adj, flow_matrix[adj_matrix_index], visited[adj]);
             if (flow_matrix[adj_matrix_index] > 0 && !visited[adj]) {
                 visited[adj] = true;
                 const int push_at = atomicAdd(&mng_pushed_num, 1) - 1;
