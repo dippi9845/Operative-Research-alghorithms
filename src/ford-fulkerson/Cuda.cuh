@@ -43,6 +43,7 @@ class FordFulkersonCuda {
         void InitializeGraphOnDevice(Graph *g);
         void InitializeParentNode();
         void InitializeVisited();
+        void InitializeQueues();
         void InitializeStartDestination();
         bool BFS(Node * start, Node * end);
         

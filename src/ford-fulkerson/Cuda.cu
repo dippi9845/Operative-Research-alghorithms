@@ -99,6 +99,11 @@ void FordFulkersonCuda::InitializeGraphOnDevice(Graph *g)
     }
 }
 
+void FordFulkersonCuda::InitializeQueues() {
+    CUDA_SAFE_CALL(cudaMalloc((void **)&this->d_first_queue, this->nodes_num * sizeof(int)));
+    CUDA_SAFE_CALL(cudaMalloc((void **)&this->d_second_queue, this->nodes_num * sizeof(int)));
+}
+
 void FordFulkersonCuda::InitializeStartDestination() {
     CUDA_SAFE_CALL(cudaMalloc((void **)&this->d_start_node, this->nodes_num * sizeof(int)));
     CUDA_SAFE_CALL(cudaMalloc((void **)&this->d_destination_node, this->nodes_num * sizeof(int)));
@@ -123,7 +128,7 @@ bool FordFulkersonCuda::BFS(Node *start, Node *end) {
 
     CUDA_SAFE_CALL(cudaMemset(this->d_parent_node + end_num, UNREACHED, sizeof(int)));
     
-    int start_num = start->GetNodeNum();
+    const int start_num = start->GetNodeNum();
     CUDA_SAFE_CALL(cudaMemset(d_pop_queue, start_num, sizeof(start_num)));
 
     // settare lo start come visited
@@ -156,6 +161,7 @@ FordFulkersonCuda::FordFulkersonCuda(Graph * g) {
     this->graph = g;
     this->nodes_num = g->GetNodesNumber();
     this->InitializeGraphOnDevice(g);
+    this->InitializeQueues();
     this->InitializeParentNode();
     this->InitializeVisited();
     this->InitializeStartDestination();
