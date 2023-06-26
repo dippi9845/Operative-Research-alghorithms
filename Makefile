@@ -29,7 +29,7 @@ ${OBJECT_DIR}/FordOmp.o : ${OBJECT_DIR}/FordSerial.o ${SRC}/ford-fulkerson/Omp.c
 
 
 test-ford-cuda : ${OBJECT_DIR}/Graph.o ${SRC}/test/test-Ford-Fulkerson-cuda.cpp ${SRC}/ford-fulkerson/Cuda.cu ${SRC}/ford-fulkerson/Cuda.cuh
-	nvcc -g ${OBJECT_DIR}/FordSerial.o ${OBJECT_DIR}/DirectedEdge.o ${OBJECT_DIR}/Node.o ${OBJECT_DIR}/Graph.o ${SRC}/ford-fulkerson/Cuda.cu ${SRC}/test/test-Ford-Fulkerson-cuda.cpp -o ${EXE_DIR}/test-for-cuda
+	nvcc -g ${OBJECT_DIR}/DirectedEdge.o ${OBJECT_DIR}/Node.o ${OBJECT_DIR}/Graph.o ${SRC}/ford-fulkerson/Cuda.cu ${SRC}/test/test-Ford-Fulkerson-cuda.cpp -o ${EXE_DIR}/test-for-cuda
 
 
 test-ford-serial: ${OBJECT_DIR}/FordSerial.o ${SRC}/test/test-Ford-Fulkerson-Serial.cpp
