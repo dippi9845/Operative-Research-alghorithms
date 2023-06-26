@@ -144,7 +144,7 @@ bool FordFulkersonCuda::BFS(Node *start, Node *end) {
 
         ComputeNextQueue<<<BLOCKS(pop_num), THREADS>>>(pop_num, d_pop_queue, d_push_queue, d_flow_matrix, d_visited, d_parent_node);
         
-        CUDA_SAFE_CALL(cudaDeviceSynchronize());
+        //CUDA_SAFE_CALL(cudaDeviceSynchronize());
 
         int * tmp = d_pop_queue;
         d_pop_queue = d_push_queue;
@@ -186,4 +186,12 @@ int FordFulkersonCuda::Solve() {
 
 
 FordFulkersonCuda::~FordFulkersonCuda() {
+    CUDA_SAFE_CALL(cudaFree(d_flow_matrix));
+    CUDA_SAFE_CALL(cudaFree(d_parent_node));
+    CUDA_SAFE_CALL(cudaFree(d_visited));
+    CUDA_SAFE_CALL(cudaFree(d_first_queue));
+    CUDA_SAFE_CALL(cudaFree(d_second_queue));
+    CUDA_SAFE_CALL(cudaFree(d_destination_node));
+    CUDA_SAFE_CALL(cudaFree(d_start_node));
+
 }
