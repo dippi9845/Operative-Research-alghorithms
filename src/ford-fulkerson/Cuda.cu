@@ -123,7 +123,7 @@ bool FordFulkersonCuda::BFS(Node *start, Node *end) {
 
     CUDA_SAFE_CALL(cudaMemset(this->d_parent_node + end_num, UNREACHED, sizeof(int)));
     
-    const int start_num = start->GetNodeNum();
+    int start_num = start->GetNodeNum();
     CUDA_SAFE_CALL(cudaMemset(d_pop_queue, start_num, sizeof(start_num)));
 
     // settare lo start come visited
