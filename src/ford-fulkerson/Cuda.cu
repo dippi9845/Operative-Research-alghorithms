@@ -137,6 +137,10 @@ bool FordFulkersonCuda::BFS(Node *start, Node *end) {
     // settare lo start come visited
     // azzerare visited
 
+    CUDA_SAFE_CALL(cudaMemset(d_visited, 0, sizeof(start_num) * this->nodes_num));
+    CUDA_SAFE_CALL(cudaMemset(d_visited + start_num, 1, sizeof(start_num)));
+
+
     mng_pushed_num = 1;
 
     CUDA_SAFE_CALL(cudaDeviceSynchronize());
