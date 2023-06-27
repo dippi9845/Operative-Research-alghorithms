@@ -5,7 +5,7 @@
     do {                                                                                           \
         cudaError_t cudaStatus = (call);                                                           \
         if (cudaStatus != cudaSuccess) {                                                            \
-            printf("Errore CUDA in %s:%d -- %s\n", __FILE__, __LINE__, cudaGetErrorString(cudaStatus)); \
+            printf("CUDA Error at %s:%d -- %s\n", __FILE__, __LINE__, cudaGetErrorString(cudaStatus)); \
             exit(EXIT_FAILURE);                                                                    \
         }                                                                                          \
     } while (0)
@@ -38,7 +38,6 @@ __global__ void FindPath(int end, int * parent_node, int * start_node, int * des
     while (parent_node[current] != UNREACHED) {
         const int start = parent_node[current];
         const int destination = current;
-
         start_node[mng_path_len] = start;
         destination_node[mng_path_len] = destination;
 
@@ -55,21 +54,15 @@ __global__ void FindPath(int end, int * parent_node, int * start_node, int * des
 }
 
 __global__ void ComputeNextQueue(int to_pop_num,  int * pop_queue, int * push_queue, int * flow_matrix, bool * visited, int *parent_node) {
-    // push_queue attualmente ci pensa la cpu
-    // senò il primo thread che entra
     const int tid = blockIdx.x * blockDim.x + threadIdx.x;
-
     if (tid < to_pop_num) {
-        printf("[gpu] tid %d pop_num %d ", tid, to_pop_num);
         const int current = pop_queue[tid];
-        printf("current %d\n", current);
 
         for (int adj = 0;  adj < d_nodes_num; adj++) {
             const int adj_matrix_index = current * d_nodes_num + adj;
-            printf("[gpu] adiacente %d flusso %d visitato %d\n", adj, flow_matrix[adj_matrix_index], visited[adj]);
             if (flow_matrix[adj_matrix_index] > 0 && !visited[adj]) {
                 visited[adj] = true;
-                const int push_at = atomicAdd(&mng_pushed_num, 1) - 1;
+                const int push_at = atomicAdd(&mng_pushed_num, 1);
                 push_queue[push_at] = adj;
                 atomicExch(parent_node + adj, current);
             }
@@ -90,14 +83,13 @@ void FordFulkersonCuda::InitializeGraphOnDevice(Graph *g)
     cudaDeviceSynchronize();
 
     for (int start = 0; start < nodes_num; start++) {
-        
         for (DirectedEdge<Node> e : *(nodes[start].GetEdges())) {
             const int end = e.GetEnd()->GetNodeNum();
             const int max_flow = e.GetMaxFlow();
             const int edge_index = start * nodes_num + end;
             int *d_edge_index = this->d_flow_matrix + edge_index;
 
-            cudaMemset(d_edge_index, max_flow, sizeof(max_flow));
+            CUDA_SAFE_CALL(cudaMemcpy(d_edge_index, &max_flow, sizeof(max_flow), cudaMemcpyHostToDevice));
         }
     }
 }
@@ -130,15 +122,11 @@ bool FordFulkersonCuda::BFS(Node *start, Node *end) {
     const int end_num = end->GetNodeNum();
 
     CUDA_SAFE_CALL(cudaMemset(this->d_parent_node + end_num, UNREACHED, sizeof(int)));
-    
-    const int start_num = start->GetNodeNum();
-    CUDA_SAFE_CALL(cudaMemset(d_pop_queue, start_num, sizeof(start_num)));
 
-    // settare lo start come visited
-    // azzerare visited
-
-    CUDA_SAFE_CALL(cudaMemset(d_visited, 0, sizeof(start_num) * this->nodes_num));
-    CUDA_SAFE_CALL(cudaMemset(d_visited + start_num, 1, sizeof(start_num)));
+    int start_num = start->GetNodeNum();
+    CUDA_SAFE_CALL(cudaMemcpy(d_pop_queue, &start_num, sizeof(int), cudaMemcpyHostToDevice));
+    CUDA_SAFE_CALL(cudaMemset(d_visited, false, sizeof(bool) * this->nodes_num));
+    CUDA_SAFE_CALL(cudaMemset(d_visited + start_num, true, sizeof(bool)));
 
 
     mng_pushed_num = 1;
@@ -150,8 +138,8 @@ bool FordFulkersonCuda::BFS(Node *start, Node *end) {
         mng_pushed_num = 0;
 
         ComputeNextQueue<<<BLOCKS(pop_num), THREADS>>>(pop_num, d_pop_queue, d_push_queue, d_flow_matrix, d_visited, d_parent_node);
-        
-        //CUDA_SAFE_CALL(cudaDeviceSynchronize());
+
+        CUDA_SAFE_CALL(cudaDeviceSynchronize());
 
         int * tmp = d_pop_queue;
         d_pop_queue = d_push_queue;
@@ -159,6 +147,7 @@ bool FordFulkersonCuda::BFS(Node *start, Node *end) {
     }
 
     FindPath<<<1,1>>>(end_num, d_parent_node, d_start_node, d_destination_node, d_flow_matrix);
+    CUDA_SAFE_CALL(cudaDeviceSynchronize());
 
     return mng_path_len > 0;
 }
@@ -200,5 +189,5 @@ FordFulkersonCuda::~FordFulkersonCuda() {
     CUDA_SAFE_CALL(cudaFree(d_second_queue));
     CUDA_SAFE_CALL(cudaFree(d_destination_node));
     CUDA_SAFE_CALL(cudaFree(d_start_node));
-
+    CUDA_SAFE_CALL(cudaDeviceSynchronize());
 }
