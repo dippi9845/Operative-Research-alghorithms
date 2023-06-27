@@ -129,7 +129,7 @@ bool FordFulkersonCuda::BFS(Node *start, Node *end) {
     int start_num = start->GetNodeNum();
     CUDA_SAFE_CALL(cudaMemcpy(d_pop_queue, &start_num, sizeof(int), cudaMemcpyHostToDevice));
     CUDA_SAFE_CALL(cudaMemset(d_visited, 0, sizeof(unsigned int) * this->nodes_num));
-    CUDA_SAFE_CALL(cudaMemset(d_visited + start_num, true, sizeof(bool)));
+    CUDA_SAFE_CALL(cudaMemset(d_visited + start_num, 1, sizeof(bool)));
 
 
     mng_pushed_num = 1;
