@@ -83,7 +83,7 @@ void FordFulkersonCuda::InitializeGraphOnDevice(Graph *g)
 
     CUDA_SAFE_CALL(cudaMalloc((void **)&d_flow_matrix, bytes_matrix));
     CUDA_SAFE_CALL(cudaMemset(d_flow_matrix, 0, bytes_matrix));
-    cudaDeviceSynchronize();
+    CUDA_SAFE_CALL(cudaDeviceSynchronize());
 
     for (int start = 0; start < nodes_num; start++) {
         for (DirectedEdge<Node> e : *(nodes[start].GetEdges())) {
@@ -129,7 +129,7 @@ bool FordFulkersonCuda::BFS(Node *start, Node *end) {
     int start_num = start->GetNodeNum();
     CUDA_SAFE_CALL(cudaMemcpy(d_pop_queue, &start_num, sizeof(int), cudaMemcpyHostToDevice));
     CUDA_SAFE_CALL(cudaMemset(d_visited, 0, sizeof(unsigned int) * this->nodes_num));
-    CUDA_SAFE_CALL(cudaMemset(d_visited + start_num, 1, sizeof(bool)));
+    CUDA_SAFE_CALL(cudaMemset(d_visited + start_num, 1, sizeof(unsigned int)));
 
 
     mng_pushed_num = 1;
@@ -164,7 +164,7 @@ FordFulkersonCuda::FordFulkersonCuda(Graph * g) {
     this->InitializeParentNode();
     this->InitializeVisited();
     this->InitializeStartDestination();
-    cudaDeviceSynchronize();
+    CUDA_SAFE_CALL(cudaDeviceSynchronize());
 
     d_nodes_num = this->nodes_num;
 }
@@ -177,6 +177,7 @@ int FordFulkersonCuda::Solve() {
 
     while (this->BFS(source, sink)) {
         IncreaseFlowKernel<<<BLOCKS(mng_path_len), THREADS>>>(d_start_node, d_destination_node, d_flow_matrix);
+        CUDA_SAFE_CALL(cudaDeviceSynchronize());
         max_flow += mng_flow;
     }
 
