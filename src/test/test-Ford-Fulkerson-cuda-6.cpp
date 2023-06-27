@@ -2,25 +2,27 @@
 #include <cstdio>
 
 int main() {
-    Graph e = Graph(1, 5);
-    e.AddNode();
+    Graph f = Graph(1, 6);
+    f.AddNode();
 
-    e.AddNode();
-    e.AddNode();
-    e.AddNode();
-    e.AddNode();
-    e.AddNode();
+    f.AddNode();
+    f.AddNode();
+    f.AddNode();
+    f.AddNode();
+    f.AddNode();
+    f.AddNode();
 
-    e.AddEdge(1, 3, 4);
-    e.AddEdge(1, 4, 4);
-    e.AddEdge(2, 1, 2);
-    e.AddEdge(2, 3, 1);
-    e.AddEdge(2, 4, 3);
-    e.AddEdge(3, 5, 3);
-    e.AddEdge(3, 4, 2);
-    e.AddEdge(4, 5, 5);
+    f.AddEdge(1, 2, 5);
+    f.AddEdge(1, 3, 5);
+    f.AddEdge(2, 3, 5);
+    f.AddEdge(2, 4, 5);
+    f.AddEdge(2, 5, 5);
+    f.AddEdge(3, 5, 5);
+    f.AddEdge(5, 4, 5);
+    f.AddEdge(5, 6, 5);
+    f.AddEdge(4, 6, 5);
 
-    FordFulkersonCuda solver = FordFulkersonCuda(&e);
+    FordFulkersonCuda solver = FordFulkersonCuda(&f);
     printf("Max flow: %d\n", solver.Solve());
     return 0;
 }
