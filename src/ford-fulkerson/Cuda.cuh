@@ -18,7 +18,7 @@ class FordFulkersonCuda {
         /*
             array that tells if a node is visited
         */
-        bool *d_visited;
+        unsigned int *d_visited;
 
         /*
             queues used for popping element and pushing

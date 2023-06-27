@@ -53,18 +53,21 @@ __global__ void FindPath(int end, int * parent_node, int * start_node, int * des
     }
 }
 
-__global__ void ComputeNextQueue(int to_pop_num,  int * pop_queue, int * push_queue, int * flow_matrix, bool * visited, int *parent_node) {
+__global__ void ComputeNextQueue(int to_pop_num,  int * pop_queue, int * push_queue, int * flow_matrix, unsigned int * visited, int *parent_node) {
     const int tid = blockIdx.x * blockDim.x + threadIdx.x;
     if (tid < to_pop_num) {
         const int current = pop_queue[tid];
 
         for (int adj = 0;  adj < d_nodes_num; adj++) {
             const int adj_matrix_index = current * d_nodes_num + adj;
-            if (flow_matrix[adj_matrix_index] > 0 && !visited[adj]) {
-                visited[adj] = true;
-                const int push_at = atomicAdd(&mng_pushed_num, 1);
-                push_queue[push_at] = adj;
-                atomicExch(parent_node + adj, current);
+            if (flow_matrix[adj_matrix_index] > 0 && visited[adj] == 0) {
+                if (atomicAdd(visited + adj, 1) == 0) {
+                    visited[adj] = true;
+                    const int push_at = atomicAdd(&mng_pushed_num, 1);
+                    push_queue[push_at] = adj;
+                    atomicExch(parent_node + adj, current);
+
+                }
             }
         }
     }
@@ -111,8 +114,8 @@ void FordFulkersonCuda::InitializeParentNode() {
 
 
 void FordFulkersonCuda::InitializeVisited() {
-    CUDA_SAFE_CALL(cudaMalloc((void **)&this->d_visited, this->nodes_num * sizeof(bool)));
-    CUDA_SAFE_CALL(cudaMemset(this->d_visited, false, this->nodes_num * sizeof(bool)));
+    CUDA_SAFE_CALL(cudaMalloc((void **)&this->d_visited, this->nodes_num * sizeof(unsigned int)));
+    CUDA_SAFE_CALL(cudaMemset(this->d_visited, 0, this->nodes_num * sizeof(bool)));
 }
 
 
@@ -125,7 +128,7 @@ bool FordFulkersonCuda::BFS(Node *start, Node *end) {
 
     int start_num = start->GetNodeNum();
     CUDA_SAFE_CALL(cudaMemcpy(d_pop_queue, &start_num, sizeof(int), cudaMemcpyHostToDevice));
-    CUDA_SAFE_CALL(cudaMemset(d_visited, false, sizeof(bool) * this->nodes_num));
+    CUDA_SAFE_CALL(cudaMemset(d_visited, 0, sizeof(unsigned int) * this->nodes_num));
     CUDA_SAFE_CALL(cudaMemset(d_visited + start_num, true, sizeof(bool)));
 
 
