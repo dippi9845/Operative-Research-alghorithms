@@ -24,5 +24,6 @@ int main() {
     g.AddEdge(5, 6, 2);
 
     FordFulkersonCuda solver = FordFulkersonCuda(&g);
+    printf("Max flow: %d\n", solver.Solve());
     return 0;
 }
