@@ -11,6 +11,6 @@ for test_file in src/test/test-Ford-Fulkerson-cuda-*; do
 done
 
 for exe_test_file in exe/test-Ford-Fulkerson-cuda-*; do
-    echo $exe_test_file
+    #echo $exe_test_file
     ./${exe_test_file}
 done
