@@ -74,7 +74,6 @@ __global__ void ComputeNextQueue(int to_pop_num,  int * pop_queue, int * push_qu
 }
 
 
-
 void FordFulkersonCuda::InitializeGraphOnDevice(Graph *g)
 {
     const int nodes_num = g->GetNodesNumber();

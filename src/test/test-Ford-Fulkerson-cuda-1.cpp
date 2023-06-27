@@ -2,6 +2,7 @@
 #include <cstdio>
 
 int main() {
+    const int expected = 6;
     Graph a = Graph(1, 4);
     a.AddNode();
     a.AddNode();
@@ -18,7 +19,8 @@ int main() {
     a.AddEdge(3, 4, 5); // 3 ---(5)---> 4
     
     FordFulkersonCuda solver = FordFulkersonCuda(&a);
-    printf("Max flow: %d\n", solver.Solve());
+    int flow_found = solver.Solve();
+    printf("Max flow: %d Expepected %d : %d\n", flow_found, expected, flow_found == expected);
 
     return 0;
 }
