@@ -6,8 +6,11 @@ using std:: queue;
 using std::vector;
 
 void FordFulkersonOmp::Expand(int adj_num, DirectedEdge<Node> * edge) {
-    if (!this->visited[adj_num] && edge->HasResidue()) {  
-        visited[adj_num] = true;
+    if (this->visited[adj_num] == 0 && edge->HasResidue()) {
+
+        #pragma omp atomic
+        visited[adj_num]++;
+        
         parent_edge[adj_num] = edge;
         
         #pragma omp task
@@ -29,7 +32,7 @@ void FordFulkersonOmp::Explore(Node *node) {
 Path FordFulkersonOmp::BFS(Node *start, Node *end) {
     Path rtr = Path();
     this->parent_edge = vector<DirectedEdge<Node> *>(this->copy->GetNodesNumber(), NULL);
-    this->visited = vector<bool>(this->copy->GetNodesNumber(), false);
+    this->visited = vector<int>(this->copy->GetNodesNumber(), 0);
 
     #pragma omp parallel default(none) shared(start)
     {

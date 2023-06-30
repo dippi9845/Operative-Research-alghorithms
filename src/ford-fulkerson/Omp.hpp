@@ -6,7 +6,7 @@
 
 class FordFulkersonOmp : FordFulkersonSerial {
 private:
-    vector<bool> visited;
+    vector<int> visited;
     vector<DirectedEdge<Node> *> parent_edge;
 
     Path BFS(Node * start, Node * end);
