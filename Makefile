@@ -39,6 +39,17 @@ test-ford-omp: ${OBJECT_DIR}/FordOmp.o ${SRC}/test/test-Ford-Fulkerson-Omp.cpp
 	${C_FLAGS} ${OMP_F} -g ${SRC}/test/test-Ford-Fulkerson-Omp.cpp ${OBJECT_DIR}/DirectedEdge.o ${OBJECT_DIR}/Node.o ${OBJECT_DIR}/Graph.o ${OBJECT_DIR}/FordSerial.o ${OBJECT_DIR}/FordOmp.o -o ${EXE_DIR}/test-for-omp
 
 
+huge-omp-test: ${OBJECT_DIR}/FordOmp.o ${SRC}/test/huge/huge-test-omp.cpp
+	${C_FLAGS} ${OMP_F} ${SRC}/test/huge/huge-test-omp.cpp ${OBJECT_DIR}/DirectedEdge.o ${OBJECT_DIR}/Node.o ${OBJECT_DIR}/Graph.o ${OBJECT_DIR}/FordSerial.o ${OBJECT_DIR}/FordOmp.o -o ${EXE_DIR}/huge-test-omp
+
+
+huge-serial-test: ${OBJECT_DIR}/FordSerial.o ${SRC}/test/huge/huge-test-serial.cpp
+	${C_FLAGS} ${OMP_F} ${SRC}/test/huge/huge-test-serial.cpp ${OBJECT_DIR}/DirectedEdge.o ${OBJECT_DIR}/Node.o ${OBJECT_DIR}/Graph.o ${OBJECT_DIR}/FordSerial.o ${OBJECT_DIR}/FordOmp.o -o ${EXE_DIR}/huge-test-serial
+
+
+huge-cuda-test: ${OBJECT_DIR}/Graph.o ${SRC}/ford-fulkerson/Cuda.cu 
+	nvcc ${OBJECT_DIR}/DirectedEdge.o ${OBJECT_DIR}/Node.o ${OBJECT_DIR}/Graph.o ${SRC}/ford-fulkerson/Cuda.cu ${SRC}/test/huge/huge-test-cuda.cu -o ${EXE_DIR}/huge-test-cuda
+
 .PHONY : all test-ford-serial test-graph clean
 
 
