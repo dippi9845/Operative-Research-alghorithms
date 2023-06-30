@@ -41,6 +41,19 @@
         "miDebuggerPath": "/usr/bin/gdb"
       },
       {
+        "name": "Debug Huge Omp Ford",
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "${workspaceFolder}/exe/huge-test-omp",
+        "args": [],
+        "stopAtEntry": false,
+        "cwd": "${workspaceFolder}",
+        "environment": [],
+        "externalConsole": false,
+        "MIMode": "gdb",
+        "miDebuggerPath": "/usr/bin/gdb"
+      },
+      {
         "name": "CUDA Launch",
         "type": "cppdbg",
         "request": "launch",
