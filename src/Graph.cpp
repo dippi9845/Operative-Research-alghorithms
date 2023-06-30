@@ -81,7 +81,7 @@ GraphGenerator::GraphGenerator() {
     this->edge_num = 0;
     this->node_num = 0;
     this->min_one_path = true;
-    this->unique_edge = true;
+    this->unique_edge = false;
     this->seed = 42;
 }
 
