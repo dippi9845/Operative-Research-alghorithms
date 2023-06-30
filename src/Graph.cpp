@@ -63,14 +63,25 @@ int Graph::GetMaxFlow()
     return this->highest_max_flow;
 }
 
-Graph * GraphGenerator::AddEdgeWithRandomMaxFlow(int start, int end) {
-    return this->generated.AddEdge(start, end, rand() % 50 + 1);
+bool GraphGenerator::AddEdgeWithRandomMaxFlow(int start, int end) {
+    if (this->unique_edge) {
+        vector<DirectedEdge<Node>> * toCheck = this->generated.GetNodes()[start].GetEdges();
+        for (DirectedEdge<Node> a : *toCheck) {
+            if (a.GetStart()->GetNodeNum() == start) {
+                return false;
+            }
+        }
+    }
+
+    this->generated.AddEdge(start, end, rand() % 50 + 1);
+    return true;
 }
 
 GraphGenerator::GraphGenerator() {
     this->edge_num = 0;
     this->node_num = 0;
     this->min_one_path = true;
+    this->unique_edge = true;
     this->seed = 42;
 }
 
@@ -100,6 +111,11 @@ GraphGenerator * GraphGenerator::Seed(unsigned int seed) {
 
 GraphGenerator * GraphGenerator::SeedByTime() {
     return this->Seed(time(NULL));
+}
+
+GraphGenerator *GraphGenerator::SetUniquesEdges(bool flag) {
+    this->unique_edge = flag;
+    return this;
 }
 
 Graph GraphGenerator::Generate() {
@@ -149,9 +165,14 @@ Graph GraphGenerator::Generate() {
         int edges_to_add = rand() % 4 + 1; // avoid zero
         
         for (int i = 0; i < edges_to_add && remaining_edges > 0; i++) {
-            const int random_node = rand() % this->node_num;
+            int random_node;
+            int itetation = 0;
 
-            this->AddEdgeWithRandomMaxFlow(current_node, random_node);
+            do {
+                itetation ++;
+                random_node = rand() % this->node_num;
+            } while (this->AddEdgeWithRandomMaxFlow(current_node, random_node) && itetation < this->node_num);
+            
             
             remaining_edges--;
         }

@@ -38,10 +38,11 @@ private:
     int node_num;
     int edge_num;
     bool min_one_path;
+    bool unique_edge;
     unsigned int seed;
     Graph generated = Graph(0, 0);
 
-    Graph * AddEdgeWithRandomMaxFlow(int start, int end);
+    bool AddEdgeWithRandomMaxFlow(int start, int end);
 
 public:
     GraphGenerator();
@@ -50,6 +51,7 @@ public:
     GraphGenerator * MinOnePath(bool condition);
     GraphGenerator * Seed(unsigned int seed);
     GraphGenerator * SeedByTime();
+    GraphGenerator * SetUniquesEdges(bool flag);
     Graph Generate();
     ~GraphGenerator();
 };
