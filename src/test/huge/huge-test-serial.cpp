@@ -5,18 +5,21 @@
 
 int main() {
 
-    printf("Generation ... ");
+    //printf("Generation ... ");
     GraphGenerator gf = GraphGenerator();
-    Graph h = gf.NodeNumber(960)
-                ->EdgeNumber(921600)
+    //Graph h = gf.NodeNumber(960)
+    //            ->EdgeNumber(921600)
+    Graph h = gf.NodeNumber(50)
+                ->EdgeNumber(600)
                 ->Generate();
-    printf("OK\n");
+    //printf("OK\n");
     
     FordFulkersonSerial solver = FordFulkersonSerial(&h);
     int max_flow;
     double start = hpc_gettime();
     max_flow = solver.Solve();
     double end = hpc_gettime() - start;
+    h.PrintAsMatrix();
     printf("Max flow: %d\n", max_flow);
-    printf("Took %f s\n", end);
+    //printf("Took %f s\n", end);
 }

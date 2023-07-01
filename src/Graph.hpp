@@ -31,6 +31,7 @@ public:
 
     int GetNodesNumber();
     int GetMaxFlow();
+    void PrintAsMatrix();
 };
 
 class GraphGenerator {

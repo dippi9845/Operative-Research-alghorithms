@@ -5,16 +5,20 @@
 using std:: queue;
 using std::vector;
 
+#include <cstdio>
+
 void FordFulkersonOmp::Expand(int adj_num, DirectedEdge<Node> * edge) {
     if (this->visited[adj_num] == 0 && edge->HasResidue()) {
 
-        #pragma omp atomic
-        visited[adj_num]++;
+        #pragma omp critical
+        {
+            visited[adj_num]++;
+            parent_edge[adj_num] = edge;
+            #pragma omp task
+            this->Explore(edge->GetEnd());
+        }
         
-        parent_edge[adj_num] = edge;
         
-        #pragma omp task
-        this->Explore(edge->GetEnd());
     }
 }
 
@@ -45,8 +49,10 @@ Path FordFulkersonOmp::BFS(Node *start, Node *end) {
         while (*current != *start) {
             DirectedEdge<Node> * pe = parent_edge[current->GetNodeNum()];
             rtr.AddEdge(pe);
+            printf("%d->%d ", pe->GetEnd()->GetNodeNum(), pe->GetStart()->GetNodeNum());
             current = pe->GetStart();
         }
+        printf("\n");
         
     }
 
@@ -66,6 +72,7 @@ int FordFulkersonOmp::Solve() {
     while (!bfs_path.IsEmpty()) {
 
         max_flow += bfs_path.IncreaseFlow();
+        printf("%d\n", max_flow);
         bfs_path = this->BFS(source, silk);
     
     }
