@@ -142,6 +142,9 @@ Graph GraphGenerator::RandomGenerate() {
 
 
 void GraphGenerator::FillGenerate() {
+
+    this->generated = Graph(0, this->node_num);
+
     /* add all nodes */
     for (int i = 0; i < this->node_num; i++) {
         this->generated.AddNode();

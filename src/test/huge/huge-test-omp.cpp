@@ -11,10 +11,10 @@ int main() {
     printf("OK\n");
     
     FordFulkersonOmp solver = FordFulkersonOmp(&h);
-    int max_flow;
+
     double start = hpc_gettime();
-    max_flow = solver.Solve();
+    solver.Solve();
     double end = hpc_gettime() - start;
-    printf("Max flow: %d\n", max_flow);
+
     printf("Took %f s\n", end);
 }
