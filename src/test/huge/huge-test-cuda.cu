@@ -7,9 +7,7 @@ int main() {
 
     printf("Generation ... ");
     GraphGenerator gf = GraphGenerator();
-    Graph h = gf.NodeNumber(960)
-                ->EdgeNumber(921600)
-                ->Generate();
+    Graph h = gf.NodeNumber(50)->Generate();
     printf("OK\n");
     
     FordFulkersonCuda solver = FordFulkersonCuda(&h);

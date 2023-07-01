@@ -45,6 +45,8 @@ private:
 
     bool AddEdgeWithRandomMaxFlow(int start, int end);
     void ApplyMatrix();
+    Graph RandomGenerate();
+    void FillGenerate();
 
 public:
     GraphGenerator();

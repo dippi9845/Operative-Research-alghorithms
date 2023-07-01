@@ -7,9 +7,7 @@ int main() {
 
     printf("Generation ... ");
     GraphGenerator gf = GraphGenerator();
-    Graph h = gf.NodeNumber(960)
-                ->EdgeNumber(921600)
-                ->Generate();
+    Graph h = gf.NodeNumber(960)->Generate();
     printf("OK\n");
     
     FordFulkersonOmp solver = FordFulkersonOmp(&h);
