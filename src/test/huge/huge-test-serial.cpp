@@ -7,12 +7,8 @@ int main() {
 
     //printf("Generation ... ");
     GraphGenerator gf = GraphGenerator();
-    //Graph h = gf.NodeNumber(960)
-    //            ->EdgeNumber(921600)
-    Graph h = gf.NodeNumber(50)
-                ->EdgeNumber(600)
-                ->Generate();
-    //printf("OK\n");
+    Graph h = gf.NodeNumber(960)->Generate();
+    printf("OK\n");
     
     FordFulkersonSerial solver = FordFulkersonSerial(&h);
     int max_flow;

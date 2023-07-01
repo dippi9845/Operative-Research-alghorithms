@@ -106,6 +106,80 @@ void GraphGenerator::ApplyMatrix() {
 }
 
 
+Graph GraphGenerator::RandomGenerate() { 
+    int source = rand() % this->node_num;
+    int silk = rand() % this->node_num;
+    int remaining_edges = this->edge_num;
+
+    this->generated = Graph(source, silk);
+
+    /* add all nodes */
+    for (int i = 0; i < this->node_num; i++) {
+        this->generated.AddNode();
+    }
+
+    /* if u want to ensure a path from source amd silk */
+    if (this->min_one_path) {
+        int intermediate_nodes = rand() % this->node_num;
+
+        if (intermediate_nodes == 0) {
+            this->AddEdgeWithRandomMaxFlow(source, silk);
+        }
+
+        else {
+            intermediate_nodes--;
+            int first_node = rand() % this->node_num;
+            int last_node = first_node;
+            this->AddEdgeWithRandomMaxFlow(source, first_node);
+
+            for (int i = 0; i < intermediate_nodes && remaining_edges > 0; i++) {
+                last_node = rand() % this->node_num;
+                this->AddEdgeWithRandomMaxFlow(first_node, last_node);
+                remaining_edges--;
+                first_node = last_node;
+            }
+
+            this->AddEdgeWithRandomMaxFlow(last_node, silk);
+        }
+
+    }
+
+    int current_node = 0;
+
+    while (remaining_edges > 0) {
+        int edges_to_add = rand() % 4 + 1; // avoid zero
+        
+        for (int i = 0; i < edges_to_add && remaining_edges > 0; i++) {
+            int random_node = rand() % this->node_num;
+            this->AddEdgeWithRandomMaxFlow(current_node, random_node);
+            
+            remaining_edges--;
+        }
+
+        current_node++;
+        current_node %= this->node_num;
+
+    }
+    
+    return this->generated;
+}
+
+
+void GraphGenerator::FillGenerate() {
+    /* add all nodes */
+    for (int i = 0; i < this->node_num; i++) {
+        this->generated.AddNode();
+    }
+    
+    for (int i = 0; i < this->node_num; i++) {
+        for( int j = 0; j < this->node_num; j++) {
+            if (i != j) {
+                this->adiacency_matrix[i * this->node_num + j] = rand() % 50 + 1;
+            }
+        }
+    }
+}
+
 GraphGenerator::GraphGenerator() {
     this->edge_num = 0;
     this->node_num = 0;
@@ -153,59 +227,11 @@ Graph GraphGenerator::Generate() {
     srand(this->seed);
     this->adiacency_matrix = (int *)calloc(this->node_num * this->node_num, sizeof(int));
 
-    int source = rand() % this->node_num;
-    int silk = rand() % this->node_num;
-    int remaining_edges = this->edge_num;
-
-
-    this->generated = Graph(source, silk);
-
-    /* add all nodes */
-    for (int i = 0; i < this->node_num; i++) {
-        this->generated.AddNode();
-    }    
-    
-    /* if u want to ensure a path from source amd silk */
-    if (this->min_one_path) {
-        int intermediate_nodes = rand() % this->node_num;
-
-        if (intermediate_nodes == 0) {
-            this->AddEdgeWithRandomMaxFlow(source, silk);
-        }
-
-        else {
-            intermediate_nodes--;
-            int first_node = rand() % this->node_num;
-            int last_node = first_node;
-            this->AddEdgeWithRandomMaxFlow(source, first_node);
-
-            for (int i = 0; i < intermediate_nodes && remaining_edges > 0; i++) {
-                last_node = rand() % this->node_num;
-                this->AddEdgeWithRandomMaxFlow(first_node, last_node);
-                remaining_edges--;
-                first_node = last_node;
-            }
-
-            this->AddEdgeWithRandomMaxFlow(last_node, silk);
-        }
-
+    if (this->edge_num == 0) {
+        this->FillGenerate();
     }
-
-    int current_node = 0;
-
-    while (remaining_edges > 0) {
-        int edges_to_add = rand() % 4 + 1; // avoid zero
-        
-        for (int i = 0; i < edges_to_add && remaining_edges > 0; i++) {
-            int random_node = rand() % this->node_num;
-            this->AddEdgeWithRandomMaxFlow(current_node, random_node);
-            
-            remaining_edges--;
-        }
-
-        current_node++;
-        current_node %= this->node_num;
-
+    else {
+        this->RandomGenerate();
     }
 
     this->ApplyMatrix();
@@ -220,6 +246,5 @@ Graph GraphGenerator::Generate() {
 
 
     free(this->adiacency_matrix);
-
     return this->generated;
 }
