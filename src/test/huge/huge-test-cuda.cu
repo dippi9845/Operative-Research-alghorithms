@@ -15,7 +15,7 @@ int main(int argc, char **argv) {
 
     //printf("Generation ... ");
     GraphGenerator gf = GraphGenerator();
-    Graph h = gf.NodeNumber(950)->Generate();
+    Graph h = gf.NodeNumber(n)->Generate();
     //printf("OK\n");
     
     FordFulkersonCuda solver = FordFulkersonCuda(&h);
