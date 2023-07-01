@@ -7,14 +7,18 @@ using std::vector;
 
 void FordFulkersonOmp::Expand(int adj_num, DirectedEdge<Node> * edge) {
     if (this->visited[adj_num] == 0 && edge->HasResidue()) {
+        int old_visited = 0;
+        #pragma omp atomic capture
+        {
+            visited[adj_num]++;
+            old_visited = visited[adj_num];
+        }
+        if (old_visited == 1) {
+            parent_edge[adj_num] = edge;
+            #pragma omp task
+            this->Explore(edge->GetEnd());
 
-        #pragma omp atomic
-        visited[adj_num]++;
-        
-        parent_edge[adj_num] = edge;
-        
-        #pragma omp task
-        this->Explore(edge->GetEnd());
+        }
     }
 }
 
@@ -62,7 +66,6 @@ int FordFulkersonOmp::Solve() {
     int max_flow = 0;
 
     Path bfs_path = this->BFS(source, silk);
-
     while (!bfs_path.IsEmpty()) {
 
         max_flow += bfs_path.IncreaseFlow();

@@ -4,6 +4,8 @@
 #include <cstdlib>
 #include <ctime>
 
+#include <cstdio>
+
 Graph::Graph(int source, int silk)
 {
     this->source = source;
@@ -61,6 +63,28 @@ int Graph::GetNodesNumber()
 int Graph::GetMaxFlow()
 {
     return this->highest_max_flow;
+}
+
+void Graph::PrintAsMatrix() {
+    for (int i = 0; i < this->last_node_number; i++) {
+        for (int j = 0; j < this->last_node_number; j++) {
+            bool flag = true;
+
+            for (DirectedEdge<Node> tmp : *(this->nodes[i].GetEdges())) {
+                if (tmp.GetEnd()->GetNodeNum() == j) {
+                    flag = false;
+                    printf("%2d ", tmp.GetResidueFlow());
+                }
+            }
+
+            if (flag) {
+                printf(" 0 ");
+            }
+
+        }
+        printf("\n");
+    }
+    printf("\n");
 }
 
 bool GraphGenerator::AddEdgeWithRandomMaxFlow(int start, int end) {
@@ -143,7 +167,7 @@ Graph GraphGenerator::RandomGenerate() {
 
 void GraphGenerator::FillGenerate() {
 
-    this->generated = Graph(0, this->node_num);
+    this->generated = Graph(0, this->node_num - 1);
 
     /* add all nodes */
     for (int i = 0; i < this->node_num; i++) {
@@ -214,6 +238,18 @@ Graph GraphGenerator::Generate() {
     }
 
     this->ApplyMatrix();
+
+    /*
+    for (int i = 0; i < this->node_num; i++) {
+        for (int j = 0; j < this->node_num; j++) {
+            printf("%2d ", this->adiacency_matrix[i * this->node_num + j]);
+        }
+        printf("\n");
+    }
+    printf("\n");
+    */
+
+
     free(this->adiacency_matrix);
     return this->generated;
 }

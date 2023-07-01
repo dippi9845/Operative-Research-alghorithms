@@ -58,9 +58,10 @@ Path FordFulkersonSerial::BFS(Node * start, Node * end) {
         while (*current != *start) {
             DirectedEdge<Node> * pe = parent_edge[current->GetNodeNum()];
             rtr.AddEdge(pe);
+            //printf("%d->%d ", pe->GetEnd()->GetNodeNum(), pe->GetStart()->GetNodeNum());
             current = pe->GetStart();
         }
-        
+        //printf("\n");
     }
 
     return rtr;
@@ -107,6 +108,7 @@ bool Path::IsEmpty() {
 void Path::AddEdge(DirectedEdge<Node> *edge) {
     if (edge->GetResidueFlow() < this->min_flow) {
         this->min_flow = edge->GetResidueFlow();
+        //printf(" (%d) ", this->min_flow);
     }
     this->edges.push_back(edge);
 }
