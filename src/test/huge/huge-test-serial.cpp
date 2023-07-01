@@ -2,20 +2,24 @@
 #include "../../Graph.hpp"
 #include "../../ford-fulkerson/Serial.hpp"
 #include <cstdio>
+#include <cstdlib>
 
-int main() {
+int main(int argc, char **argv) {
+    int n = 950;
+
+    if (argc > 1) {
+        n = atoi(argv[1]);
+    }
 
     //printf("Generation ... ");
     GraphGenerator gf = GraphGenerator();
-    Graph h = gf.NodeNumber(50)->Generate();
-    printf("OK\n");
+    Graph h = gf.NodeNumber(n)->Generate();
+    //printf("OK\n");
     
     FordFulkersonSerial solver = FordFulkersonSerial(&h);
-    int max_flow;
     double start = hpc_gettime();
-    max_flow = solver.Solve();
+    solver.Solve();
     double end = hpc_gettime() - start;
-    h.PrintAsMatrix();
-    printf("Max flow: %d\n", max_flow);
-    //printf("Took %f s\n", end);
+    
+    printf("%f\n", end);
 }

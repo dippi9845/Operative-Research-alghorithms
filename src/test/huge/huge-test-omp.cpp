@@ -3,19 +3,27 @@
 #include "../../ford-fulkerson/Omp.hpp"
 #include <cstdio>
 
-int main() {
+#include <cstdlib>
 
-    //printf("Generation ... \n");
+int main(int argc, char **argv) {
+
+    int n = 950;
+
+    if (argc > 1) {
+        n = atoi(argv[1]);
+    }
+
+
+    //printf("Generation ... ");
     GraphGenerator gf = GraphGenerator();
-    Graph h = gf.NodeNumber(50)->Generate();
-    printf("OK\n");
+    Graph h = gf.NodeNumber(n)->Generate();
+    //printf("OK\n");
     
     FordFulkersonOmp solver = FordFulkersonOmp(&h);
-    int max_flow;
+
     double start = hpc_gettime();
-    max_flow = solver.Solve();
+    solver.Solve();
     double end = hpc_gettime() - start;
-    h.PrintAsMatrix();
-    printf("Max flow: %d\n", max_flow);
-    //printf("Took %f s\n", end);
+
+    printf("%f\n", end);
 }

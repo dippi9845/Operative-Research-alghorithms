@@ -3,18 +3,25 @@
 #include "../../ford-fulkerson/Cuda.cuh"
 #include <cstdio>
 
-int main() {
+#include <cstdlib>
+
+int main(int argc, char **argv) {
+
+    int n = 950;
+
+    if (argc > 1) {
+        n = atoi(argv[1]);
+    }
 
     //printf("Generation ... ");
     GraphGenerator gf = GraphGenerator();
-    Graph h = gf.NodeNumber(50)->Generate();
-    printf("OK\n");
+    Graph h = gf.NodeNumber(950)->Generate();
+    //printf("OK\n");
     
     FordFulkersonCuda solver = FordFulkersonCuda(&h);
-    int max_flow;
+
     double start = hpc_gettime();
-    max_flow = solver.Solve();
+    solver.Solve();
     double end = hpc_gettime() - start;
-    printf("Max flow: %d\n", max_flow);
-    //printf("Took %f s\n", end);
+    printf("%f\n", end);
 }
