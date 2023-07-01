@@ -7,7 +7,7 @@ int main() {
 
     //printf("Generation ... ");
     GraphGenerator gf = GraphGenerator();
-    Graph h = gf.NodeNumber(960)->Generate();
+    Graph h = gf.NodeNumber(50)->Generate();
     printf("OK\n");
     
     FordFulkersonSerial solver = FordFulkersonSerial(&h);
