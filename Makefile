@@ -44,7 +44,7 @@ huge-omp-test: ${OBJECT_DIR}/FordOmp.o ${SRC}/test/huge/huge-test-omp.cpp
 
 
 huge-serial-test: ${OBJECT_DIR}/FordSerial.o ${SRC}/test/huge/huge-test-serial.cpp
-	${C_FLAGS} ${OMP_F} ${SRC}/test/huge/huge-test-serial.cpp ${OBJECT_DIR}/DirectedEdge.o ${OBJECT_DIR}/Node.o ${OBJECT_DIR}/Graph.o ${OBJECT_DIR}/FordSerial.o ${OBJECT_DIR}/FordOmp.o -o ${EXE_DIR}/huge-test-serial
+	${C_FLAGS} ${SRC}/test/huge/huge-test-serial.cpp ${OBJECT_DIR}/DirectedEdge.o ${OBJECT_DIR}/Node.o ${OBJECT_DIR}/Graph.o ${OBJECT_DIR}/FordSerial.o -o ${EXE_DIR}/huge-test-serial
 
 
 huge-cuda-test: ${OBJECT_DIR}/Graph.o ${SRC}/ford-fulkerson/Cuda.cu 
@@ -54,4 +54,4 @@ huge-cuda-test: ${OBJECT_DIR}/Graph.o ${SRC}/ford-fulkerson/Cuda.cu
 
 
 clean :
-	-rm -r object/*
+	-rm -r object/* exe/*
