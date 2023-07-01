@@ -40,9 +40,11 @@ private:
     bool min_one_path;
     bool unique_edge;
     unsigned int seed;
+    int *adiacency_matrix;
     Graph generated = Graph(0, 0);
 
     bool AddEdgeWithRandomMaxFlow(int start, int end);
+    void ApplyMatrix();
 
 public:
     GraphGenerator();

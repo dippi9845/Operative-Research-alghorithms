@@ -64,18 +64,23 @@ int Graph::GetMaxFlow()
 }
 
 bool GraphGenerator::AddEdgeWithRandomMaxFlow(int start, int end) {
-    if (this->unique_edge) {
-        vector<DirectedEdge<Node>> * toCheck = this->generated.GetNodes()[start].GetEdges();
-        for (DirectedEdge<Node> a : *toCheck) {
-            if (a.GetStart()->GetNodeNum() == start) {
-                return false;
+    //this->generated.AddEdge(start, end, rand() % 50 + 1);
+    this->adiacency_matrix[start * this->node_num + end] = rand() % 50 + 1;
+    return true;
+}
+
+void GraphGenerator::ApplyMatrix() {
+    for (int i = 0; i < this->node_num; i++) {
+        for( int j = 0; j < this->node_num; j++) {
+            
+            const int flux = this->adiacency_matrix[i * this->node_num + j];
+            if (flux > 0) {
+                this->generated.AddEdge(i, j, flux);
             }
         }
     }
-
-    this->generated.AddEdge(start, end, rand() % 50 + 1);
-    return true;
 }
+
 
 GraphGenerator::GraphGenerator() {
     this->edge_num = 0;
@@ -118,8 +123,11 @@ GraphGenerator *GraphGenerator::SetUniquesEdges(bool flag) {
     return this;
 }
 
+
+
 Graph GraphGenerator::Generate() {
     srand(this->seed);
+    this->adiacency_matrix = (int *)calloc(this->node_num * this->node_num, sizeof(int));
 
     int source = rand() % this->node_num;
     int silk = rand() % this->node_num;
@@ -165,14 +173,8 @@ Graph GraphGenerator::Generate() {
         int edges_to_add = rand() % 4 + 1; // avoid zero
         
         for (int i = 0; i < edges_to_add && remaining_edges > 0; i++) {
-            int random_node;
-            int itetation = 0;
-
-            do {
-                itetation ++;
-                random_node = rand() % this->node_num;
-            } while (this->AddEdgeWithRandomMaxFlow(current_node, random_node) && itetation < this->node_num);
-            
+            int random_node = rand() % this->node_num;
+            this->AddEdgeWithRandomMaxFlow(current_node, random_node);
             
             remaining_edges--;
         }
@@ -181,6 +183,9 @@ Graph GraphGenerator::Generate() {
         current_node %= this->node_num;
 
     }
+
+    this->ApplyMatrix();
+    free(this->adiacency_matrix);
 
     return this->generated;
 }
