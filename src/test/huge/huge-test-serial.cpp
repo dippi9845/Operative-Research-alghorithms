@@ -1,18 +1,18 @@
 #include "../../hpc.h"
 #include "../../Graph.hpp"
-#include "../../ford-fulkerson/Omp.hpp"
+#include "../../ford-fulkerson/Serial.hpp"
 #include <cstdio>
 
 int main() {
 
     printf("Generation ... ");
     GraphGenerator gf = GraphGenerator();
-    Graph h = gf.NodeNumber(60)
-                ->EdgeNumber(3000)
+    Graph h = gf.NodeNumber(960)
+                ->EdgeNumber(921600)
                 ->Generate();
     printf("OK\n");
     
-    FordFulkersonOmp solver = FordFulkersonOmp(&h);
+    FordFulkersonSerial solver = FordFulkersonSerial(&h);
     int max_flow;
     double start = hpc_gettime();
     max_flow = solver.Solve();

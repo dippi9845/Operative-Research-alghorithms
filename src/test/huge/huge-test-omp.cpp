@@ -7,8 +7,8 @@ int main() {
 
     printf("Generation ... ");
     GraphGenerator gf = GraphGenerator();
-    Graph h = gf.NodeNumber(60)
-                ->EdgeNumber(3000)
+    Graph h = gf.NodeNumber(960)
+                ->EdgeNumber(921600)
                 ->Generate();
     printf("OK\n");
     
