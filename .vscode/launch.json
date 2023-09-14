@@ -2,7 +2,7 @@
     "version": "0.2.0",
     "configurations": [
       {
-        "name": "Debug Serial Ford",
+        "name": "Debug Serial Edmons",
         "type": "cppdbg",
         "request": "launch",
         "program": "${workspaceFolder}/exe/test-for-serial",
@@ -28,7 +28,7 @@
         "miDebuggerPath": "/usr/bin/gdb"
       },
       {
-        "name": "Debug Omp Ford",
+        "name": "Debug Omp Edmons",
         "type": "cppdbg",
         "request": "launch",
         "program": "${workspaceFolder}/exe/test-for-omp",
@@ -41,7 +41,7 @@
         "miDebuggerPath": "/usr/bin/gdb"
       },
       {
-        "name": "Debug Huge Omp Ford",
+        "name": "Debug Huge Omp Edmons",
         "type": "cppdbg",
         "request": "launch",
         "program": "${workspaceFolder}/exe/huge-test-omp",

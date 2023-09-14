@@ -1,6 +1,6 @@
 #include "../Graph.hpp"
-#ifndef FORD_FULKERSON_SERIAL
-#define FORD_FULKERSON_SERIAL
+#ifndef EDMONS_KARP_SERIAL
+#define EDMONS_KARP_SERIAL
 
 class Path
 {

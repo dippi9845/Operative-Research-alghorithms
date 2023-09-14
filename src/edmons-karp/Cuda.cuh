@@ -1,5 +1,5 @@
-#ifndef FORD_FULKERSON_CUDA
-#define FORD_FULKERSON_CUDA
+#ifndef EDMONS_KARP_CUDA
+#define EDMONS_KARP_CUDA
 
 #include "Serial.hpp"
 

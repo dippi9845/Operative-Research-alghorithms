@@ -1,5 +1,5 @@
-#ifndef FORD_FULKERSON_OMP
-#define FORD_FULKERSON_OMP
+#ifndef EDMONS_KARP_OMP
+#define EDMONS_KARP_OMP
 
 #include "Serial.hpp"
 #include <omp.h>
