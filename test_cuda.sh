@@ -3,7 +3,7 @@ OBJECT_DIR=object
 EXE_DIR=exe
 SRC=src
 
-for test_file in src/test/test-edmons-karp-cuda-*; do
+for test_file in src/test/test-Edmons-Karp-cuda-*; do
     file_name=$(basename "$test_file")
     file_name="${file_name%.*}"
     echo $file_name
