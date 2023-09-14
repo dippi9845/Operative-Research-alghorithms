@@ -28,7 +28,7 @@ ${OBJECT_DIR}/EdmonsOmp.o : ${OBJECT_DIR}/EdmonsSerial.o ${SRC}/edmons-karp/Omp.
 	${C_O_FLAGS} ${OMP_F} -g ${SRC}/edmons-karp/Omp.cpp -o ${OBJECT_DIR}/EdmonsOmp.o
 
 test-edmons-serial: ${OBJECT_DIR}/EdmonsSerial.o ${SRC}/test/test-edmons-karp-Serial.cpp
-	${C_FLAGS} -g ${SRC}/test/test-edmons-karp-Serial.cpp ${OBJECT_DIR}/DirectedEdge.o ${OBJECT_DIR}/Node.o ${OBJECT_DIR}/Graph.o ${OBJECT_DIR}/EdmonsSerial.o -o ${EXE_DIR}/test-for-serial
+	${C_FLAGS} -g ${SRC}/test/test-edmons-karp-Serial.cpp ${OBJECT_DIR}/DirectedEdge.o ${OBJECT_DIR}/Node.o ${OBJECT_DIR}/Graph.o ${OBJECT_DIR}/EdmonsSerial.o -o ${EXE_DIR}/test-emd-serial
 
 
 test-graph: ${OBJECT_DIR}/Graph.o ${SRC}/test/test-graph.cpp
@@ -36,7 +36,7 @@ test-graph: ${OBJECT_DIR}/Graph.o ${SRC}/test/test-graph.cpp
 
 
 test-edmons-omp: ${OBJECT_DIR}/EdmonsOmp.o ${SRC}/test/test-edmons-karp-Omp.cpp
-	${C_FLAGS} ${OMP_F} -g ${SRC}/test/test-edmons-karp-Omp.cpp ${OBJECT_DIR}/DirectedEdge.o ${OBJECT_DIR}/Node.o ${OBJECT_DIR}/Graph.o ${OBJECT_DIR}/EdmonsSerial.o ${OBJECT_DIR}/EdmonsOmp.o -o ${EXE_DIR}/test-for-omp
+	${C_FLAGS} ${OMP_F} -g ${SRC}/test/test-edmons-karp-Omp.cpp ${OBJECT_DIR}/DirectedEdge.o ${OBJECT_DIR}/Node.o ${OBJECT_DIR}/Graph.o ${OBJECT_DIR}/EdmonsSerial.o ${OBJECT_DIR}/EdmonsOmp.o -o ${EXE_DIR}/test-edm-omp
 
 
 huge-omp-test: ${OBJECT_DIR}/EdmonsOmp.o ${SRC}/test/huge/huge-test-omp.cpp
