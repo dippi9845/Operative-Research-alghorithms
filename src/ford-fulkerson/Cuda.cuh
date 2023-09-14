@@ -3,7 +3,7 @@
 
 #include "Serial.hpp"
 
-class FordFulkersonCuda {
+class EdmonsKarpCuda {
     private:
         /*
             Matrix, containing all the flows
@@ -48,9 +48,9 @@ class FordFulkersonCuda {
         bool BFS(Node * start, Node * end);
         
     public:
-        FordFulkersonCuda(Graph * g);
+        EdmonsKarpCuda(Graph * g);
         int Solve();
-        ~FordFulkersonCuda();
+        ~EdmonsKarpCuda();
 };
 
 #endif

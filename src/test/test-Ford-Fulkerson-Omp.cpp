@@ -18,7 +18,7 @@ int main() {
     a.AddEdge(2, 3, 3); // 2 ---(3)---> 3
     a.AddEdge(3, 4, 5); // 3 ---(5)---> 4
     
-    FordFulkersonOmp solver = FordFulkersonOmp(&a);
+    EdmonsKarpOmp solver = EdmonsKarpOmp(&a);
     printf("Max flow: %d\n", solver.Solve());
 
     Graph b = Graph(1, 9);
@@ -48,7 +48,7 @@ int main() {
     b.AddEdge(8, 9, 20);
 
 
-    solver = FordFulkersonOmp(&b);
+    solver = EdmonsKarpOmp(&b);
     printf("Max flow: %d\n", solver.Solve());
 
 
@@ -93,7 +93,7 @@ int main() {
     c.AddEdge(10, 11, 4);
 
 
-    solver = FordFulkersonOmp(&c);
+    solver = EdmonsKarpOmp(&c);
     printf("Max flow: %d\n", solver.Solve());
 
     Graph d = Graph(1,6);
@@ -116,7 +116,7 @@ int main() {
     d.AddEdge(5, 4, 2);
     d.AddEdge(5, 6, 3);
 
-    solver = FordFulkersonOmp(&d);
+    solver = EdmonsKarpOmp(&d);
     printf("Max flow: %d\n", solver.Solve());
 
     Graph e = Graph(1, 5);
@@ -137,7 +137,7 @@ int main() {
     e.AddEdge(3, 4, 2);
     e.AddEdge(4, 5, 5);
 
-    solver = FordFulkersonOmp(&e);
+    solver = EdmonsKarpOmp(&e);
     printf("Max flow: %d\n", solver.Solve());
 
     Graph f = Graph(1, 6);
@@ -160,7 +160,7 @@ int main() {
     f.AddEdge(5, 6, 5);
     f.AddEdge(4, 6, 5);
 
-    solver = FordFulkersonOmp(&f);
+    solver = EdmonsKarpOmp(&f);
     printf("Max flow: %d\n", solver.Solve());
 
     Graph g = Graph(1, 6);
@@ -184,7 +184,7 @@ int main() {
     g.AddEdge(5, 4, 2);
     g.AddEdge(5, 6, 2);
 
-    solver = FordFulkersonOmp(&g);
+    solver = EdmonsKarpOmp(&g);
     printf("Max flow: %d\n", solver.Solve());
 
     printf("Generating...\n");
@@ -194,6 +194,6 @@ int main() {
                 ->Generate();
     printf("Generated OK\n");
     
-    solver = FordFulkersonOmp(&h);
+    solver = EdmonsKarpOmp(&h);
     printf("Max flow (generated): %d\n", solver.Solve());
 }

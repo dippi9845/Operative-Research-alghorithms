@@ -18,7 +18,7 @@ int main() {
     a.AddEdge(2, 3, 3); // 2 ---(3)---> 3
     a.AddEdge(3, 4, 5); // 3 ---(5)---> 4
     
-    FordFulkersonCuda solver = FordFulkersonCuda(&a);
+    EdmonsKarpCuda solver = EdmonsKarpCuda(&a);
     int flow_found = solver.Solve();
     printf("Max flow: %d Expepected %d : %d\n", flow_found, expected, flow_found == expected);
 

@@ -17,7 +17,7 @@ public:
 };
 
 
-class FordFulkersonSerial {
+class EdmonsKarpSerial {
 
 private:
     Graph * original;
@@ -30,9 +30,9 @@ protected:
     void InitCopyGraph();
 
 public:
-    FordFulkersonSerial(Graph * max_flow_graph);
+    EdmonsKarpSerial(Graph * max_flow_graph);
     int Solve();
-    ~FordFulkersonSerial();
+    ~EdmonsKarpSerial();
 
 };
 

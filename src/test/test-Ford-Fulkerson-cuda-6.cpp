@@ -22,7 +22,7 @@ int main() {
     f.AddEdge(5, 6, 5);
     f.AddEdge(4, 6, 5);
 
-    FordFulkersonCuda solver = FordFulkersonCuda(&f);
+    EdmonsKarpCuda solver = EdmonsKarpCuda(&f);
     printf("Max flow: %d\n", solver.Solve());
     return 0;
 }

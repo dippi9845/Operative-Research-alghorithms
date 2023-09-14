@@ -16,7 +16,7 @@ int main(int argc, char **argv) {
     Graph h = gf.NodeNumber(n)->Generate();
     //printf("OK\n");
     
-    FordFulkersonSerial solver = FordFulkersonSerial(&h);
+    EdmonsKarpSerial solver = EdmonsKarpSerial(&h);
     double start = hpc_gettime();
     solver.Solve();
     double end = hpc_gettime() - start;

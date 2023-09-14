@@ -19,7 +19,7 @@ int main(int argc, char **argv) {
     Graph h = gf.NodeNumber(n)->Generate();
     //printf("OK\n");
     
-    FordFulkersonOmp solver = FordFulkersonOmp(&h);
+    EdmonsKarpOmp solver = EdmonsKarpOmp(&h);
 
     double start = hpc_gettime();
     solver.Solve();

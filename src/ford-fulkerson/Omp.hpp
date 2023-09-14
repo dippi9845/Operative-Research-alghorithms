@@ -4,7 +4,7 @@
 #include "Serial.hpp"
 #include <omp.h>
 
-class FordFulkersonOmp : FordFulkersonSerial {
+class EdmonsKarpOmp : EdmonsKarpSerial {
 private:
     vector<int> visited;
     vector<DirectedEdge<Node> *> parent_edge;
@@ -16,9 +16,9 @@ private:
     void Explore(Node * node);
 
 public:
-    FordFulkersonOmp(Graph * max_flow_graph);
+    EdmonsKarpOmp(Graph * max_flow_graph);
     int Solve();
-    ~FordFulkersonOmp();
+    ~EdmonsKarpOmp();
 };
 
 #endif

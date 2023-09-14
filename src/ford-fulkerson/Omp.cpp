@@ -5,7 +5,7 @@
 using std:: queue;
 using std::vector;
 
-void FordFulkersonOmp::Expand(int adj_num, DirectedEdge<Node> * edge) {
+void EdmonsKarpOmp::Expand(int adj_num, DirectedEdge<Node> * edge) {
     if (this->visited[adj_num] == 0 && edge->HasResidue()) {
         int old_visited = 0;
         #pragma omp atomic capture
@@ -22,7 +22,7 @@ void FordFulkersonOmp::Expand(int adj_num, DirectedEdge<Node> * edge) {
     }
 }
 
-void FordFulkersonOmp::Explore(Node *node) {
+void EdmonsKarpOmp::Explore(Node *node) {
     vector<DirectedEdge<Node>> * edges = node->GetEdges();
 
     for (long unsigned int edge_idx = 0; edge_idx < edges->size(); edge_idx++) {
@@ -33,7 +33,7 @@ void FordFulkersonOmp::Explore(Node *node) {
     }
 }
 
-Path FordFulkersonOmp::BFS(Node *start, Node *end) {
+Path EdmonsKarpOmp::BFS(Node *start, Node *end) {
     Path rtr = Path();
     this->parent_edge = vector<DirectedEdge<Node> *>(this->copy->GetNodesNumber(), NULL);
     this->visited = vector<int>(this->copy->GetNodesNumber(), 0);
@@ -57,10 +57,10 @@ Path FordFulkersonOmp::BFS(Node *start, Node *end) {
     return rtr;
 }
 
-FordFulkersonOmp::FordFulkersonOmp(Graph * max_flow_graph) : FordFulkersonSerial(max_flow_graph) {
+EdmonsKarpOmp::EdmonsKarpOmp(Graph * max_flow_graph) : EdmonsKarpSerial(max_flow_graph) {
 }
 
-int FordFulkersonOmp::Solve() {
+int EdmonsKarpOmp::Solve() {
     Node * source = this->copy->GetSource();
     Node * silk = this->copy->GetSilk();
     int max_flow = 0;
@@ -76,5 +76,5 @@ int FordFulkersonOmp::Solve() {
     return max_flow;
 }
 
-FordFulkersonOmp::~FordFulkersonOmp() {
+EdmonsKarpOmp::~EdmonsKarpOmp() {
 }

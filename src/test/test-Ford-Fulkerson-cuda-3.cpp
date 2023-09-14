@@ -43,7 +43,7 @@ int main() {
     c.AddEdge(10, 11, 4);
 
 
-    FordFulkersonCuda solver = FordFulkersonCuda(&c);
+    EdmonsKarpCuda solver = EdmonsKarpCuda(&c);
     printf("Max flow: %d\n", solver.Solve());
     return 0;
 }

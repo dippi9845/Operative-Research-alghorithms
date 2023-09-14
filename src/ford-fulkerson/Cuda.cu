@@ -74,7 +74,7 @@ __global__ void ComputeNextQueue(int to_pop_num,  int * pop_queue, int * push_qu
 }
 
 
-void FordFulkersonCuda::InitializeGraphOnDevice(Graph *g)
+void EdmonsKarpCuda::InitializeGraphOnDevice(Graph *g)
 {
     const int nodes_num = g->GetNodesNumber();
     unsigned int bytes_matrix = nodes_num * nodes_num * sizeof(nodes_num);
@@ -96,29 +96,29 @@ void FordFulkersonCuda::InitializeGraphOnDevice(Graph *g)
     }
 }
 
-void FordFulkersonCuda::InitializeQueues() {
+void EdmonsKarpCuda::InitializeQueues() {
     CUDA_SAFE_CALL(cudaMalloc((void **)&this->d_first_queue, this->nodes_num * sizeof(int)));
     CUDA_SAFE_CALL(cudaMalloc((void **)&this->d_second_queue, this->nodes_num * sizeof(int)));
 }
 
-void FordFulkersonCuda::InitializeStartDestination() {
+void EdmonsKarpCuda::InitializeStartDestination() {
     CUDA_SAFE_CALL(cudaMalloc((void **)&this->d_start_node, this->nodes_num * sizeof(int)));
     CUDA_SAFE_CALL(cudaMalloc((void **)&this->d_destination_node, this->nodes_num * sizeof(int)));
 }
 
-void FordFulkersonCuda::InitializeParentNode() {
+void EdmonsKarpCuda::InitializeParentNode() {
     CUDA_SAFE_CALL(cudaMalloc((void **)&this->d_parent_node, this->nodes_num * sizeof(int)));
     CUDA_SAFE_CALL(cudaMemset(this->d_parent_node, UNREACHED, this->nodes_num * sizeof(int)));
 }
 
 
-void FordFulkersonCuda::InitializeVisited() {
+void EdmonsKarpCuda::InitializeVisited() {
     CUDA_SAFE_CALL(cudaMalloc((void **)&this->d_visited, this->nodes_num * sizeof(unsigned int)));
     CUDA_SAFE_CALL(cudaMemset(this->d_visited, 0, this->nodes_num * sizeof(bool)));
 }
 
 
-bool FordFulkersonCuda::BFS(Node *start, Node *end) {
+bool EdmonsKarpCuda::BFS(Node *start, Node *end) {
     int *d_pop_queue = this->d_first_queue;
     int *d_push_queue = this->d_second_queue;
     const int end_num = end->GetNodeNum();
@@ -155,7 +155,7 @@ bool FordFulkersonCuda::BFS(Node *start, Node *end) {
 }
 
 
-FordFulkersonCuda::FordFulkersonCuda(Graph * g) {
+EdmonsKarpCuda::EdmonsKarpCuda(Graph * g) {
     this->graph = g;
     this->nodes_num = g->GetNodesNumber();
     this->InitializeGraphOnDevice(g);
@@ -169,7 +169,7 @@ FordFulkersonCuda::FordFulkersonCuda(Graph * g) {
 }
 
 
-int FordFulkersonCuda::Solve() {
+int EdmonsKarpCuda::Solve() {
     Node * source = this->graph->GetSource();
     Node * sink = this->graph->GetSilk();
     int max_flow = 0;
@@ -184,7 +184,7 @@ int FordFulkersonCuda::Solve() {
 }
 
 
-FordFulkersonCuda::~FordFulkersonCuda() {
+EdmonsKarpCuda::~EdmonsKarpCuda() {
     CUDA_SAFE_CALL(cudaFree(d_flow_matrix));
     CUDA_SAFE_CALL(cudaFree(d_parent_node));
     CUDA_SAFE_CALL(cudaFree(d_visited));

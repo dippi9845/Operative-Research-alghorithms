@@ -18,7 +18,7 @@ int main(int argc, char **argv) {
     Graph h = gf.NodeNumber(n)->Generate();
     //printf("OK\n");
     
-    FordFulkersonCuda solver = FordFulkersonCuda(&h);
+    EdmonsKarpCuda solver = EdmonsKarpCuda(&h);
 
     double start = hpc_gettime();
     solver.Solve();

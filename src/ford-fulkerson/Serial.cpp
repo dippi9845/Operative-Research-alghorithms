@@ -7,7 +7,7 @@
 #include <cstdlib>
 using std::queue;
 
-void FordFulkersonSerial::InitCopyGraph() {
+void EdmonsKarpSerial::InitCopyGraph() {
     vector<Node> nodes = this->original->GetNodes();
 
     for (Node i : nodes) {
@@ -24,7 +24,7 @@ void FordFulkersonSerial::InitCopyGraph() {
     }
 }
 
-Path FordFulkersonSerial::BFS(Node * start, Node * end) {
+Path EdmonsKarpSerial::BFS(Node * start, Node * end) {
     queue<Node *> qu;
     Path rtr = Path();
     vector<DirectedEdge<Node> *> parent_edge = vector<DirectedEdge<Node> *>(this->original->GetNodesNumber(), NULL);
@@ -67,7 +67,7 @@ Path FordFulkersonSerial::BFS(Node * start, Node * end) {
     return rtr;
 }
 
-FordFulkersonSerial::FordFulkersonSerial(Graph *max_flow_graph) {
+EdmonsKarpSerial::EdmonsKarpSerial(Graph *max_flow_graph) {
     this->original = max_flow_graph;
     this->copy = max_flow_graph;
     //this->copy = new Graph(this->original->GetSource()->GetNodeNum(), this->original->GetSilk()->GetNodeNum());
@@ -75,7 +75,7 @@ FordFulkersonSerial::FordFulkersonSerial(Graph *max_flow_graph) {
     
 }
 
-int FordFulkersonSerial::Solve()
+int EdmonsKarpSerial::Solve()
 {
     Node * source = this->copy->GetSource();
     Node * silk = this->copy->GetSilk();
@@ -93,7 +93,7 @@ int FordFulkersonSerial::Solve()
     return max_flow;
 }
 
-FordFulkersonSerial::~FordFulkersonSerial() {
+EdmonsKarpSerial::~EdmonsKarpSerial() {
 }
 
 Path::Path() {
