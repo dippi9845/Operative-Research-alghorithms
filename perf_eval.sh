@@ -1,7 +1,7 @@
 STEP=100
 MAX=1000
 
-for (( i=$STEP ; $i <= $MAX; i=$i+$STEP )); do 
+for (( i=$STEP ; $i <= $MAX; i=$i+$STEP )); do
     exe/huge-test-serial $i >> serial_perf.txt
 done
 
