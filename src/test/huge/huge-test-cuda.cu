@@ -1,6 +1,6 @@
 #include "../../hpc.h"
 #include "../../Graph.hpp"
-#include "../../ford-fulkerson/Cuda.cuh"
+#include "../../edmons-karp/Cuda.cuh"
 #include <cstdio>
 
 #include <cstdlib>

@@ -20,23 +20,23 @@ ${OBJECT_DIR}/Graph.o : ${SRC}/Graph.hpp ${SRC}/Graph.cpp ${OBJECT_DIR}/Node.o
 	${C_O_FLAGS} -g ${SRC}/Graph.cpp -o ${OBJECT_DIR}/Graph.o
 
 
-${OBJECT_DIR}/FordSerial.o : ${OBJECT_DIR}/Graph.o ${SRC}/ford-fulkerson/Serial.cpp ${SRC}/ford-fulkerson/Serial.hpp
-	${C_O_FLAGS} -g ${SRC}/ford-fulkerson/Serial.cpp -o ${OBJECT_DIR}/FordSerial.o
+${OBJECT_DIR}/FordSerial.o : ${OBJECT_DIR}/Graph.o ${SRC}/edmons-karp/Serial.cpp ${SRC}/edmons-karp/Serial.hpp
+	${C_O_FLAGS} -g ${SRC}/edmons-karp/Serial.cpp -o ${OBJECT_DIR}/FordSerial.o
 
 
-${OBJECT_DIR}/FordOmp.o : ${OBJECT_DIR}/FordSerial.o ${SRC}/ford-fulkerson/Omp.cpp ${SRC}/ford-fulkerson/Omp.hpp
-	${C_O_FLAGS} ${OMP_F} -g ${SRC}/ford-fulkerson/Omp.cpp -o ${OBJECT_DIR}/FordOmp.o
+${OBJECT_DIR}/FordOmp.o : ${OBJECT_DIR}/FordSerial.o ${SRC}/edmons-karp/Omp.cpp ${SRC}/edmons-karp/Omp.hpp
+	${C_O_FLAGS} ${OMP_F} -g ${SRC}/edmons-karp/Omp.cpp -o ${OBJECT_DIR}/FordOmp.o
 
-test-ford-serial: ${OBJECT_DIR}/FordSerial.o ${SRC}/test/test-Ford-Fulkerson-Serial.cpp
-	${C_FLAGS} -g ${SRC}/test/test-Ford-Fulkerson-Serial.cpp ${OBJECT_DIR}/DirectedEdge.o ${OBJECT_DIR}/Node.o ${OBJECT_DIR}/Graph.o ${OBJECT_DIR}/FordSerial.o -o ${EXE_DIR}/test-for-serial
+test-ford-serial: ${OBJECT_DIR}/FordSerial.o ${SRC}/test/test-edmons-karp-Serial.cpp
+	${C_FLAGS} -g ${SRC}/test/test-edmons-karp-Serial.cpp ${OBJECT_DIR}/DirectedEdge.o ${OBJECT_DIR}/Node.o ${OBJECT_DIR}/Graph.o ${OBJECT_DIR}/FordSerial.o -o ${EXE_DIR}/test-for-serial
 
 
 test-graph: ${OBJECT_DIR}/Graph.o ${SRC}/test/test-graph.cpp
 	${C_FLAGS} -g ${SRC}/test/test-graph.cpp ${OBJECT_DIR}/DirectedEdge.o ${OBJECT_DIR}/Node.o ${OBJECT_DIR}/Graph.o -o ${EXE_DIR}/test-graph
 
 
-test-ford-omp: ${OBJECT_DIR}/FordOmp.o ${SRC}/test/test-Ford-Fulkerson-Omp.cpp
-	${C_FLAGS} ${OMP_F} -g ${SRC}/test/test-Ford-Fulkerson-Omp.cpp ${OBJECT_DIR}/DirectedEdge.o ${OBJECT_DIR}/Node.o ${OBJECT_DIR}/Graph.o ${OBJECT_DIR}/FordSerial.o ${OBJECT_DIR}/FordOmp.o -o ${EXE_DIR}/test-for-omp
+test-ford-omp: ${OBJECT_DIR}/FordOmp.o ${SRC}/test/test-edmons-karp-Omp.cpp
+	${C_FLAGS} ${OMP_F} -g ${SRC}/test/test-edmons-karp-Omp.cpp ${OBJECT_DIR}/DirectedEdge.o ${OBJECT_DIR}/Node.o ${OBJECT_DIR}/Graph.o ${OBJECT_DIR}/FordSerial.o ${OBJECT_DIR}/FordOmp.o -o ${EXE_DIR}/test-for-omp
 
 
 huge-omp-test: ${OBJECT_DIR}/FordOmp.o ${SRC}/test/huge/huge-test-omp.cpp
@@ -47,8 +47,8 @@ huge-serial-test: ${OBJECT_DIR}/FordSerial.o ${SRC}/test/huge/huge-test-serial.c
 	${C_FLAGS} ${SRC}/test/huge/huge-test-serial.cpp ${OBJECT_DIR}/DirectedEdge.o ${OBJECT_DIR}/Node.o ${OBJECT_DIR}/Graph.o ${OBJECT_DIR}/FordSerial.o -o ${EXE_DIR}/huge-test-serial
 
 
-huge-cuda-test: ${OBJECT_DIR}/Graph.o ${SRC}/ford-fulkerson/Cuda.cu 
-	nvcc ${OBJECT_DIR}/DirectedEdge.o ${OBJECT_DIR}/Node.o ${OBJECT_DIR}/Graph.o ${SRC}/ford-fulkerson/Cuda.cu ${SRC}/test/huge/huge-test-cuda.cu -o ${EXE_DIR}/huge-test-cuda
+huge-cuda-test: ${OBJECT_DIR}/Graph.o ${SRC}/edmons-karp/Cuda.cu 
+	nvcc ${OBJECT_DIR}/DirectedEdge.o ${OBJECT_DIR}/Node.o ${OBJECT_DIR}/Graph.o ${SRC}/edmons-karp/Cuda.cu ${SRC}/test/huge/huge-test-cuda.cu -o ${EXE_DIR}/huge-test-cuda
 
 .PHONY : all test-ford-serial test-graph clean
 

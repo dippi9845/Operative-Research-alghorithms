@@ -1,5 +1,5 @@
 #include "../Graph.hpp"
-#include "../ford-fulkerson/Omp.hpp"
+#include "../edmons-karp/Omp.hpp"
 #include <cstdio>
 
 int main() {

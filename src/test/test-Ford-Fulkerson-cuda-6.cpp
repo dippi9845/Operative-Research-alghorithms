@@ -1,4 +1,4 @@
-#include "../ford-fulkerson/Cuda.cuh"
+#include "../edmons-karp/Cuda.cuh"
 #include <cstdio>
 
 int main() {

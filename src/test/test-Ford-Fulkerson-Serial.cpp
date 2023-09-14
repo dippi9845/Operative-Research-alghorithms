@@ -1,5 +1,5 @@
 #include "../Graph.hpp"
-#include "../ford-fulkerson/Serial.hpp"
+#include "../edmons-karp/Serial.hpp"
 #include <cstdio>
 
 int main() {

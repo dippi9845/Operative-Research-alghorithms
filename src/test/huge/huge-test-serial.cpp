@@ -1,6 +1,6 @@
 #include "../../hpc.h"
 #include "../../Graph.hpp"
-#include "../../ford-fulkerson/Serial.hpp"
+#include "../../edmons-karp/Serial.hpp"
 #include <cstdio>
 #include <cstdlib>
 
