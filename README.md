@@ -1,1 +1,1 @@
-# Operative-Research-alghorithms
+# Operative-Research-algorithms
